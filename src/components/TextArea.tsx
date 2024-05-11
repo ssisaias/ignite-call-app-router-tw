@@ -16,5 +16,5 @@ export function TextArea(props: TextAreaProps) {
         disabled={props.disabled}
       ></textarea>
     </>
-  );
+  )
 }

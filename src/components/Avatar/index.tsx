@@ -1,7 +1,7 @@
 'use client'
-import { User } from "@phosphor-icons/react/dist/ssr";
-import * as AvatarRdx from "@radix-ui/react-avatar";
-import { ComponentProps } from "react";
+import { User } from '@phosphor-icons/react/dist/ssr'
+import * as AvatarRdx from '@radix-ui/react-avatar'
+import { ComponentProps } from 'react'
 
 export interface AvatarProps
   extends ComponentProps<typeof AvatarRdx.AvatarImage> {}
@@ -17,8 +17,8 @@ export function Avatar(props: AvatarProps) {
         delayMs={600}
         className="flex items-center justify-center bg-gray-600 text-gray-800 xw-full h-full"
       >
-        <User className="w-6 h-6" weight="duotone"/>
+        <User className="w-6 h-6" weight="duotone" />
       </AvatarRdx.Fallback>
     </AvatarRdx.Root>
-  );
+  )
 }

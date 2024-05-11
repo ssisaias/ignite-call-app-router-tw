@@ -1,16 +1,16 @@
 'use client'
-import { Text } from "../Text";
+import { Text } from '../Text'
 
 export interface MultistepProps {
-  size: number;
-  currentStep: number;
+  size: number
+  currentStep: number
 }
 
 export function Multistep({ size, currentStep = 1 }: MultistepProps) {
   return (
     <div>
       <Text
-        as={"label"}
+        as={'label'}
         content={`Passo ${currentStep} de ${size}`}
         size="xs"
         className="text-gray-400"
@@ -22,11 +22,11 @@ export function Multistep({ size, currentStep = 1 }: MultistepProps) {
             className={`border-1 h-1 bg-gray-600`}
             style={{
               backgroundColor:
-                step <= currentStep ? "rgb(229 231 235)" : undefined,
+                step <= currentStep ? 'rgb(229 231 235)' : undefined,
             }}
           ></div>
         ))}
       </div>
     </div>
-  );
+  )
 }

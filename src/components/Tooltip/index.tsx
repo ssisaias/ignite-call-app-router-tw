@@ -1,25 +1,22 @@
 'use client'
-import { PlusCircle } from "@phosphor-icons/react/dist/ssr";
-import * as TooltipRdx from "@radix-ui/react-tooltip";
-import React from "react";
-import { Text, TextProps } from "../Text";
+import * as TooltipRdx from '@radix-ui/react-tooltip'
+import React from 'react'
+import { Text, TextProps } from '../Text'
 
 export interface TooltipProps
-  extends Omit<TooltipRdx.TooltipProps, "children"> {
-  textContent: string;
-  variant?: "dark" | "light";
-  size: TextProps["size"];
-  textClassName: TextProps["className"];
-  tooltipTrigger: React.ReactNode;
+  extends Omit<TooltipRdx.TooltipProps, 'children'> {
+  textContent: string
+  variant?: 'dark' | 'light'
+  size: TextProps['size']
+  textClassName: TextProps['className']
+  tooltipTrigger: React.ReactNode
 }
 
 export function Tooltip(props: TooltipProps) {
   const tooltipClass =
-    !props.variant || props.variant === "dark" ? "bg-gray900" : "bg-gray400";
+    !props.variant || props.variant === 'dark' ? 'bg-gray900' : 'bg-gray400'
   const arrowClass =
-    !props.variant || props.variant === "dark"
-      ? "fill-gray900"
-      : "fill-gray400";
+    !props.variant || props.variant === 'dark' ? 'fill-gray900' : 'fill-gray400'
   return (
     <TooltipRdx.Provider>
       <TooltipRdx.Root>
@@ -39,5 +36,5 @@ export function Tooltip(props: TooltipProps) {
         </TooltipRdx.Portal>
       </TooltipRdx.Root>
     </TooltipRdx.Provider>
-  );
+  )
 }
