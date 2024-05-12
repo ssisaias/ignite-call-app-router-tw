@@ -13,16 +13,13 @@ export default function Home() {
         className="flex items-center gap-20 ml-auto max-w-[calc(100vw-(100vw-1160px))/2] overflow-hidden"
       >
         <div id="hero" className="max-w-[480px] pl-10">
-          <Heading
-            content="Agendamento descomplicado"
-            size="4xl"
-            className="font-bold "
-          />
-          <Text
-            size="lg"
-            content="Conecte seu calendário e permita que seus clientes agendem horários com você no seu tempo livre."
-            className="mt-2 text-gray-200"
-          />
+          <Heading size="4xl" className="font-bold ">
+            Agendamento descomplicado
+          </Heading>
+          <Text size="lg" className="mt-2 text-gray-200">
+            Conecte seu calendário e permita que seus clientes agendem horários
+            com você no seu tempo livre.
+          </Text>
           <div className="my-2">
             <ClaimUsernameForm />
           </div>
