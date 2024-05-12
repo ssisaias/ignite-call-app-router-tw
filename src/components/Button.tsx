@@ -4,9 +4,9 @@ import React, { ComponentProps } from 'react'
 
 export interface ButtonProps extends ComponentProps<'button'> {
   disabled?: boolean
-  label: string
-  variant: 'primary' | 'secondary' | 'tertiary'
+  variant?: 'primary' | 'secondary' | 'tertiary'
   size: 'sm' | 'md'
+  children: React.ReactNode
 }
 
 export function Button(props: ButtonProps) {
@@ -24,11 +24,11 @@ export function Button(props: ButtonProps) {
   })
   return (
     <button
-      className={`${variant} ${size} box-border flex min-w-[120px] cursor-pointer items-center justify-center gap-2 rounded-sm text-center font-default text-sm font-medium focus:text-gray-100 focus:shadow-[0_0_0_2px] disabled:cursor-not-allowed`}
       disabled={props.disabled}
       {...props}
+      className={`${variant} ${size} box-border flex min-w-[120px] cursor-pointer items-center justify-center gap-2 rounded-sm text-center font-default text-sm font-medium focus:text-gray-100 focus:shadow-[0_0_0_2px] disabled:cursor-not-allowed ${props.className}`}
     >
-      {props.label}
+      {props.children}
     </button>
   )
 }

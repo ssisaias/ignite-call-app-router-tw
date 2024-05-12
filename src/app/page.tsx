@@ -3,6 +3,7 @@ import { Text } from '@/components/Text'
 
 import previewImg from '../assets/homepreview.png'
 import Image from 'next/image'
+import { ClaimUsernameForm } from '@/components/ClaimUsernameForm'
 
 export default function Home() {
   return (
@@ -22,6 +23,9 @@ export default function Home() {
             content="Conecte seu calendário e permita que seus clientes agendem horários com você no seu tempo livre."
             className="mt-2 text-gray-200"
           />
+          <div className="my-2">
+            <ClaimUsernameForm />
+          </div>
         </div>
         <div id="preview">
           <Image
