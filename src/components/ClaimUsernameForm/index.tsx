@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Text } from '../Text'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 const claimUsernameFormSchema = z.object({
   username: z
@@ -23,6 +25,8 @@ const claimUsernameFormSchema = z.object({
 type ClaimUsernameFormData = z.infer<typeof claimUsernameFormSchema>
 
 export function ClaimUsernameForm() {
+  const [buttonClicked, setButtonClicked] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -31,8 +35,13 @@ export function ClaimUsernameForm() {
     resolver: zodResolver(claimUsernameFormSchema),
   })
 
+  const router = useRouter()
+
   async function handleClaimUsername(data: ClaimUsernameFormData) {
-    console.log(data)
+    setButtonClicked(true)
+    const { username } = data
+    router.push(`/register?username=${username}`)
+    setTimeout(() => setButtonClicked(false), 10000)
   }
 
   return (
@@ -50,7 +59,12 @@ export function ClaimUsernameForm() {
           type="text"
           {...register('username')}
         />
-        <Button type="submit" size="md" className="h-full">
+        <Button
+          type="submit"
+          size="md"
+          className="h-full"
+          disabled={buttonClicked}
+        >
           Reservar login
           <ArrowRight />
         </Button>
