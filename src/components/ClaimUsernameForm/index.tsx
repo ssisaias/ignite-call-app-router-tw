@@ -1,24 +1,68 @@
+'use client'
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
 import { Button } from '../Button'
 import { TextInput } from '../TextInput'
 import { Box } from '../Box'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Text } from '../Text'
+
+const claimUsernameFormSchema = z.object({
+  username: z
+    .string()
+    .min(3, 'O nome de usuário deve ter pelo menos 3 caracteres')
+    .max(20, 'O nome de usuário deve ter no máximo 20 caracteres')
+    .regex(
+      /^[a-z0-9-]+$/,
+      'O nome de usuário deve conter apenas letras, números e hífens',
+    )
+    .transform((value) => value.toLowerCase()),
+})
+
+type ClaimUsernameFormData = z.infer<typeof claimUsernameFormSchema>
 
 export function ClaimUsernameForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ClaimUsernameFormData>({
+    resolver: zodResolver(claimUsernameFormSchema),
+  })
+
+  async function handleClaimUsername(data: ClaimUsernameFormData) {
+    console.log(data)
+  }
+
   return (
-    <Box
-      as={'form'}
-      className="bg-gray700 grid grid-flow-row gap-2 mt-4 md:grid-flow-col"
-    >
-      <TextInput
-        sizeVariant="sm"
-        prefix="sample.com/"
-        placeholder="seu-usuario"
-        className="h-full"
-      />
-      <Button type="submit" size="md" className="h-full">
-        Reservar login
-        <ArrowRight />
-      </Button>
-    </Box>
+    <>
+      <Box
+        as={'form'}
+        className="bg-gray700 grid grid-flow-row gap-2 mt-4 md:grid-flow-col"
+        onSubmit={handleSubmit(handleClaimUsername)}
+      >
+        <TextInput
+          sizeVariant="sm"
+          prefix="sample.com/"
+          placeholder="seu-usuario"
+          className="h-full"
+          type="text"
+          {...register('username')}
+        />
+        <Button type="submit" size="md" className="h-full">
+          Reservar login
+          <ArrowRight />
+        </Button>
+      </Box>
+      
+        <Text
+          as={'span'}
+          size="sm"
+          className="text-red-500 absolute"
+          content={errors.username?.message || ''}
+        ></Text>
+      
+    </>
   )
 }

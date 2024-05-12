@@ -15,11 +15,12 @@ export function Toast({ message, description, theme }: ToastProps) {
         variant="secondary"
         size="md"
         content="Show Toast"
-        label={'Show Toast'}
         onClick={() => {
           toast(message, { description })
         }}
-      ></Button>
+      >
+        Show Toast
+      </Button>
       <Toaster theme={theme} />
     </>
   )

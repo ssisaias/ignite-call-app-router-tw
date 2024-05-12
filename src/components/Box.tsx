@@ -15,6 +15,8 @@ export function Box(props: BoxProps) {
       {props.as && (
         <props.as
           className={`${props.className} p-6 rounded-md bg-gray-800 border-solid border-[1px] border-gray-600`}
+          onClick={props.onClick}
+          onSubmit={props.onSubmit}
         >
           {props.content && <Text content={props.content}></Text>}
           {Children.toArray(props.children).map((child, index) => (
