@@ -5,7 +5,7 @@ import { forwardRef } from 'react'
 export interface TextInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   prefix?: string
-  sizeVariant: 'sm' | 'md'
+  sizeVariant?: 'sm' | 'md'
 }
 
 // eslint-disable-next-line react/display-name
@@ -17,7 +17,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     })
     return (
       <div
-        className={`${size} align-center box-border flex rounded-sm border-2 border-solid border-gray-900
+        className={`${size} align-center box-border flex rounded-sm border-2 border-solid border-gray900 bg-gray900
       focus-within:border-ignite300
         has-[input:disabled]:cursor-not-allowed has-[input:disabled]:opacity-50 
       `}

@@ -5,7 +5,7 @@ import React, { ComponentProps } from 'react'
 export interface ButtonProps extends ComponentProps<'button'> {
   disabled?: boolean
   variant?: 'primary' | 'secondary' | 'tertiary'
-  size: 'sm' | 'md'
+  size?: 'sm' | 'md'
   children: React.ReactNode
 }
 

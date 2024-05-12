@@ -55,14 +55,10 @@ export function ClaimUsernameForm() {
           <ArrowRight />
         </Button>
       </Box>
-      
-        <Text
-          as={'span'}
-          size="sm"
-          className="text-red-500 absolute"
-          content={errors.username?.message || ''}
-        ></Text>
-      
+
+      <Text as={'span'} size="sm" className="text-red-500 absolute">
+        {errors.username?.message || ''}
+      </Text>
     </>
   )
 }
