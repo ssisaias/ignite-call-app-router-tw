@@ -9,9 +9,11 @@ import { TextInput } from '@/components/TextInput'
 import { api } from '@/lib/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from '@phosphor-icons/react'
+import { AxiosError } from 'axios'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { Toaster, toast } from 'sonner'
 import * as z from 'zod'
 
 const registerFormSchema = z.object({
@@ -52,6 +54,9 @@ export function RegisterForm() {
         username: data.username,
       })
     } catch (error) {
+      if (error instanceof AxiosError && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message)
+      }
       console.log(error)
     }
   }
@@ -82,7 +87,7 @@ export function RegisterForm() {
             {...register('username')}
           ></TextInput>
           {errors.username && (
-            <Text size="sm" className="text-descructive-red">
+            <Text size="sm" className="text-red-500">
               {errors.username.message}
             </Text>
           )}
@@ -92,7 +97,7 @@ export function RegisterForm() {
           <Text size="sm">Nome Completo</Text>
           <TextInput placeholder="Seu nome" {...register('name')}></TextInput>
           {errors.name && (
-            <Text size="sm" className="text-descructive-red">
+            <Text size="sm" className="text-red-500">
               {errors.name.message}
             </Text>
           )}
@@ -106,6 +111,7 @@ export function RegisterForm() {
           Próximo passo <ArrowRight />
         </Button>
       </Box>
+      <Toaster theme="dark" />
     </>
   )
 }
