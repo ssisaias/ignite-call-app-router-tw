@@ -16,7 +16,7 @@ const claimUsernameFormSchema = z.object({
     .min(3, 'O nome de usuário deve ter pelo menos 3 caracteres')
     .max(20, 'O nome de usuário deve ter no máximo 20 caracteres')
     .regex(
-      /^[a-z0-9-]+$/,
+      /^[a-zA-Z0-9-]+$/,
       'O nome de usuário deve conter apenas letras, números e hífens',
     )
     .transform((value) => value.toLowerCase()),
