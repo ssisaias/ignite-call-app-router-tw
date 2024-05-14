@@ -1,7 +1,7 @@
 import { Heading } from '@/components/Heading'
-import { RegisterForm } from './registerForm'
 import { Multistep } from '@/components/Multistep'
 import { Text } from '@/components/Text'
+import { ConnectForm } from './connectForm'
 
 export default async function SomePage() {
   return (
@@ -11,15 +11,16 @@ export default async function SomePage() {
     >
       <div id="Header" className="max-w-[572px] mt-16 ml-4 mr-4 self-center">
         <Heading as={'strong'} className="leading-base">
-          Bem vindo ao Ignite Call
+          Conecte sua agenda
         </Heading>
         <Text className="leading-base text-gray200 mb-6">
-          Precisamos de algumas informações para criar seu perfil, você pode
-          editá-las posteriormente.
+          Conecte seu calendário para verificar automaticamente as horas
+          ocupadas e os novos eventos à medida em que são agendados
         </Text>
 
-        <Multistep size={4} currentStep={1} />
-        <RegisterForm />
+        <Multistep size={4} currentStep={2} />
+
+        <ConnectForm />
       </div>
     </main>
   )

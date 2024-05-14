@@ -2,15 +2,13 @@
 
 import { Box } from '@/components/Box'
 import { Button } from '@/components/Button'
-import { Heading } from '@/components/Heading'
-import { Multistep } from '@/components/Multistep'
 import { Text } from '@/components/Text'
 import { TextInput } from '@/components/TextInput'
 import { api } from '@/lib/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from '@phosphor-icons/react'
 import { AxiosError } from 'axios'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Toaster, toast } from 'sonner'
@@ -32,6 +30,8 @@ const registerFormSchema = z.object({
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export function RegisterForm() {
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -53,6 +53,8 @@ export function RegisterForm() {
         name: data.name,
         username: data.username,
       })
+
+      await router.push('/register/connect-calendar')
     } catch (error) {
       if (error instanceof AxiosError && error?.response?.data?.message) {
         toast.error(error?.response?.data?.message)
@@ -63,16 +65,6 @@ export function RegisterForm() {
 
   return (
     <>
-      <Heading as={'strong'} className="leading-base">
-        Bem vindo ao Ignite Call
-      </Heading>
-      <Text className="leading-base text-gray200 mb-6">
-        Precisamos de algumas informações para criar seu perfil, você pode
-        editá-las posteriormente.
-      </Text>
-
-      <Multistep size={4} currentStep={1} />
-
       <Box
         id="RegisterForm"
         as={'form'}
