@@ -41,7 +41,7 @@ export function ClaimUsernameForm() {
     setButtonClicked(true)
     const { username } = data
     router.push(`/register?username=${username}`)
-    setTimeout(() => setButtonClicked(false), 10000)
+    setTimeout(() => setButtonClicked(false), 15000)
   }
 
   return (
