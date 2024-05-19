@@ -2,8 +2,11 @@ import { Heading } from '@/components/Heading'
 import { Multistep } from '@/components/Multistep'
 import { Text } from '@/components/Text'
 import { ConnectForm } from './connectForm'
+import { auth } from '@/lib/auth'
 
-export default async function SomePage() {
+export default async function Page() {
+  const session = await auth()
+
   return (
     <main
       id="Container"
@@ -20,7 +23,7 @@ export default async function SomePage() {
 
         <Multistep size={4} currentStep={2} />
 
-        <ConnectForm />
+        <ConnectForm session={session} />
       </div>
     </main>
   )

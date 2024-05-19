@@ -22,7 +22,7 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
-      colors: { ...iuicolors, 'descructive-red': '#f75a68' },
+      colors: { ...iuicolors, 'destructive-red': '#f75a68' },
       fontSize: fontSizes,
       fontWeight: fontWeights,
       lineHeight: lineHeights,
