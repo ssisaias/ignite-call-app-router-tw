@@ -52,7 +52,7 @@ export function ClaimUsernameForm() {
         onSubmit={handleSubmit(handleClaimUsername)}
       >
         <TextInput
-          sizeVariant="sm"
+          sizevariant="sm"
           prefix="sample.com/"
           placeholder="seu-usuario"
           className="h-full"

@@ -5,15 +5,15 @@ import { forwardRef } from 'react'
 export interface TextInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   prefix?: string
-  sizeVariant?: 'sm' | 'md'
+  sizevariant?: 'sm' | 'md'
 }
 
 // eslint-disable-next-line react/display-name
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   ({ prefix, ...props }: TextInputProps, ref) => {
     const size = clsx({
-      'px-2 py-2': props.sizeVariant === 'sm',
-      'px-3 py-3': props.sizeVariant === 'md' || !props.sizeVariant,
+      'px-2 py-2': props.sizevariant === 'sm',
+      'px-3 py-3': props.sizevariant === 'md' || !props.sizevariant,
     })
     return (
       <div
