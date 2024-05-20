@@ -31,7 +31,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           type="text"
           {...props}
           ref={ref}
-          className="font-default w-full border-none bg-transparent text-sm font-regular text-white placeholder-gray-400 placeholder:text-gray-400 focus:outline-0 disabled:cursor-not-allowed focus:border-none"
+          className="font-default w-full border-none bg-transparent text-sm font-regular text-white placeholder-gray-400 placeholder:text-gray-400 focus:outline-0 disabled:cursor-not-allowed focus:border-none [&::-webkit-calendar-picker-indicator]:invert"
         />
       </div>
     )
