@@ -35,7 +35,7 @@ export function ConnectForm({ session }: ConnectFormProps) {
             size="sm"
             disabled={isConnected}
           >
-            Conectar <Calendar />
+            {isConnected ? 'Conectado' : 'Conectar'} <Calendar />
           </Button>
         </div>
 
