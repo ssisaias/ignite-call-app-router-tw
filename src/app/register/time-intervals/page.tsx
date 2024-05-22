@@ -1,12 +1,7 @@
-import { Box } from '@/components/Box'
-import { Button } from '@/components/Button'
-import { Checkbox } from '@/components/Checkbox'
 import { Heading } from '@/components/Heading'
 import { Multistep } from '@/components/Multistep'
 import { Text } from '@/components/Text'
-import { TextInput } from '@/components/TextInput'
-import { auth } from '@/lib/auth'
-import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
+import IntervalForm from './intervalForm'
 
 export default function Page() {
   // const session = await auth()
@@ -27,42 +22,7 @@ export default function Page() {
 
         <Multistep size={4} currentStep={3} />
 
-        <form id="intervalbox" className="mt-6 flex flex-col">
-          <div
-            id="intervalscontainer"
-            className="border-[1px] border-solid border-gray600 rounded-md mb-4 bg-gray800"
-          >
-            <div
-              id="intervalitem"
-              className="flex flex-row justify-between items-center py-3 px-4 border-b-[1px] border-solid border-gray600"
-            >
-              <div id="intervalday" className="flex items-center gap-3">
-                <Checkbox /> <Text>Segunda-feira</Text>
-              </div>
-              <div id="intervalinputs" className="flex items-center gap-2">
-                <TextInput sizevariant="sm" type="time" step={60}></TextInput>
-                <TextInput sizevariant="sm" type="time" step={60}></TextInput>
-              </div>
-            </div>
-
-            <div
-              id="intervalitem"
-              className="flex flex-row justify-between items-center py-3 px-4 border-b-[1px] border-solid border-gray600"
-            >
-              <div id="intervalday" className="flex items-center gap-3">
-                <Checkbox /> <Text>Terça-feira</Text>
-              </div>
-              <div id="intervalinputs" className="flex items-center gap-2">
-                <TextInput sizevariant="sm" type="time" step={60}></TextInput>
-                <TextInput sizevariant="sm" type="time" step={60}></TextInput>
-              </div>
-            </div>
-          </div>
-
-          <Button type="submit" className="self-end w-full">
-            Próximo passo <ArrowRight />
-          </Button>
-        </form>
+        <IntervalForm />
       </div>
     </main>
   )
