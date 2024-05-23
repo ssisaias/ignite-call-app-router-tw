@@ -5,7 +5,7 @@ import { Text } from '@/components/Text'
 import { TextInput } from '@/components/TextInput'
 import { getWeekDays } from '@/lib/utils/get-week-days'
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const timeIntervalsFormSchema = z.object({})
@@ -57,7 +57,20 @@ export default function IntervalForm() {
               className="flex flex-row justify-between items-center py-3 px-4 border-b-[1px] border-solid border-gray600"
             >
               <div id="intervalday" className="flex items-center gap-3">
-                <Checkbox /> <Text>{weekDays[field.weekDay]}</Text>
+                <Controller
+                  name={`intervals.${idx}.enabled`}
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      {...field}
+                      onCheckedChange={(checked) =>
+                        field.onChange(checked === true)
+                      }
+                      checked={field.value}
+                    />
+                  )}
+                />
+                <Text>{weekDays[field.weekDay]}</Text>
               </div>
               <div id="intervalinputs" className="flex items-center gap-2">
                 <TextInput
