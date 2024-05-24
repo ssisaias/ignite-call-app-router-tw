@@ -3,6 +3,7 @@ import { Button } from '@/components/Button'
 import { Checkbox } from '@/components/Checkbox'
 import { Text } from '@/components/Text'
 import { TextInput } from '@/components/TextInput'
+import { convertTimeStringToMinutes } from '@/lib/utils/convert-time-to-minutes'
 import { getWeekDays } from '@/lib/utils/get-week-days'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
@@ -23,10 +24,32 @@ const timeIntervalsFormSchema = z.object({
     .transform((intervals) => intervals.filter((interval) => interval.enabled))
     .refine((intervals) => intervals.length > 0, {
       message: 'Selecione pelo menos um dia da semana',
-    }),
+    })
+    .transform((intervals) => {
+      return intervals.map((interval) => {
+        return {
+          weekDay: interval.weekDay,
+          startTimeMinutes: convertTimeStringToMinutes(interval.startTime),
+          endTimeMinutes: convertTimeStringToMinutes(interval.endTime),
+        }
+      })
+    })
+    .refine(
+      (intervals) => {
+        return intervals.every(
+          (interval) =>
+            interval.endTimeMinutes - 60 >= interval.startTimeMinutes,
+        )
+      },
+      {
+        message:
+          'O horário de término deve ser pelo menos 1 hora maior que o horário de início',
+      },
+    ),
 })
 
-type TimeIntervalsFormData = z.infer<typeof timeIntervalsFormSchema>
+type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>
+type TimeIntervalsFormOutput = z.output<typeof timeIntervalsFormSchema>
 
 export default function IntervalForm() {
   const {
@@ -35,7 +58,7 @@ export default function IntervalForm() {
     control,
     watch,
     formState: { isSubmitting, errors },
-  } = useForm({
+  } = useForm<TimeIntervalsFormInput, unknown, TimeIntervalsFormOutput>({
     resolver: zodResolver(timeIntervalsFormSchema),
     defaultValues: {
       intervals: [
@@ -59,7 +82,7 @@ export default function IntervalForm() {
 
   const intervals = watch('intervals')
 
-  async function handleSetTimeIntervals(data: TimeIntervalsFormData) {
+  async function handleSetTimeIntervals(data: TimeIntervalsFormOutput) {
     console.log(data)
   }
 
