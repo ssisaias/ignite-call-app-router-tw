@@ -17,11 +17,13 @@ export default async function UpdateProfile() {
     >
       <div id="Header" className="max-w-[572px] mt-16 ml-4 mr-4 self-center">
         <Heading as={'strong'} className="leading-base">
-          a
+          Quase lá!
         </Heading>
-        <Text className="leading-base text-gray200 mb-6">b</Text>
+        <Text className="leading-base text-gray200 mb-4">
+          Complete seu perfil.
+        </Text>
 
-        <Multistep size={4} currentStep={1} />
+        <Multistep size={4} currentStep={4} />
         <UpdateProfileForm session={session} />
       </div>
     </main>
