@@ -30,5 +30,5 @@ export async function POST(req: NextRequest) {
     })),
   })
 
-  return NextResponse.json(null, { status: 201 })
+  return new NextResponse(null, { status: 201 })
 }
