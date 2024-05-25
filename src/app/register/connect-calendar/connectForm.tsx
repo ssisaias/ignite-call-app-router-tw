@@ -3,7 +3,7 @@ import { Button } from '@/components/Button'
 import { ArrowRight, Calendar } from '@phosphor-icons/react/dist/ssr'
 import { Text } from '@/components/Text'
 import { SignIn } from '@/lib/auth-action'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Box } from '@/components/Box'
 import { Session } from 'next-auth'
 
@@ -12,11 +12,16 @@ type ConnectFormProps = {
 }
 
 export function ConnectForm({ session }: ConnectFormProps) {
+  const router = useRouter()
   const params = useSearchParams()
 
   console.log(session)
   const hasAuthError = params.has('error')
   const isConnected = !!session
+
+  async function handleNavigateAfterSignIn() {
+    await router.push('/register/time-intervals')
+  }
 
   return (
     <Box as={'div'} className="mt-6">
@@ -48,15 +53,14 @@ export function ConnectForm({ session }: ConnectFormProps) {
             novamente.
           </Text>
         )}
-
-        <Button
-          type="submit"
-          className="self-end w-full"
-          disabled={!isConnected}
-        >
-          Próximo passo <ArrowRight />
-        </Button>
       </form>
+      <Button
+        className="self-end w-full"
+        disabled={!isConnected}
+        onClick={handleNavigateAfterSignIn}
+      >
+        Próximo passo <ArrowRight />
+      </Button>
     </Box>
   )
 }
