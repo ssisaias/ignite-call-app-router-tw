@@ -3,6 +3,7 @@ import { Button } from '@/components/Button'
 import { Checkbox } from '@/components/Checkbox'
 import { Text } from '@/components/Text'
 import { TextInput } from '@/components/TextInput'
+import { api } from '@/lib/axios'
 import { convertTimeStringToMinutes } from '@/lib/utils/convert-time-to-minutes'
 import { getWeekDays } from '@/lib/utils/get-week-days'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -84,6 +85,7 @@ export default function IntervalForm() {
 
   async function handleSetTimeIntervals(data: TimeIntervalsFormOutput) {
     console.log(data)
+    await api.post('/users/time-intervals', data)
   }
 
   return (
