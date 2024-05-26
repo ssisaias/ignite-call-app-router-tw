@@ -24,7 +24,7 @@ const config: Config = {
       },
       colors: {
         ...iuicolors,
-        'destructive-red': 'rgb(247, 90, 104)',
+        'destructive-100': 'rgb(247, 90, 104)',
       },
       fontSize: fontSizes,
       fontWeight: fontWeights,

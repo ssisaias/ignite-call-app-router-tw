@@ -47,7 +47,7 @@ export function ConnectForm({ session }: ConnectFormProps) {
         {hasAuthError && (
           <Text
             size="sm"
-            className="leading-base text-destructive-red mb-6 border-destructive-red"
+            className="leading-base text-destructive-100 mb-6 border-destructive-red"
           >
             Falha ao conectar à sua agenda. Verifique suas permissões e tente
             novamente.

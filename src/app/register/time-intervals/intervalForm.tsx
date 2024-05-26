@@ -145,7 +145,7 @@ export default function IntervalForm() {
         })}
       </div>
       {errors.intervals && (
-        <Text className="mb-4 leading-base text-destructive-red" size="sm">
+        <Text className="mb-4 leading-base text-destructive-100" size="sm">
           {errors?.intervals?.root?.message}
         </Text>
       )}

@@ -38,17 +38,21 @@ export function Text(props: TextProps) {
     'text-8xl': props.size === '8xl',
     'text-9xl': props.size === '9xl',
   })
+  const defaultColor = clsx({
+    'text-gray-100':
+      !props.className || !props.className.match(/(text-.*\d{3})+/g),
+  })
   return (
     <>
       {props.as ? (
         <props.as
-          className={`${classSize} ${props.className} margin-0 font-default leading-base text-gray-100`}
+          className={`${defaultColor} ${classSize} ${props.className} margin-0 font-default leading-base `}
         >
           {props.children}
         </props.as>
       ) : (
         <p
-          className={`${classSize} ${props.className} margin-0 font-default leading-base text-gray-100`}
+          className={`${defaultColor} ${classSize} ${props.className} margin-0 font-default leading-base `}
         >
           {props.children}
         </p>
