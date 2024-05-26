@@ -7,13 +7,10 @@ export function Calendar() {
   const shortWeekDays = getWeekDays({ short: true })
 
   return (
-    <div
-      id="calendarContainer"
-      className="mr-auto mb-0 pt-2 p-6 grid grid-cols-1 gap-6 "
-    >
+    <div id="calendarContainer" className="flex flex-col gap-6 p-6">
       <div id="calendarHeader" className="flex justify-between items-center">
         <div id="calendarTitle" className="flex gap-2">
-          <Text size="md" className="font-medium">
+          <Text size="md" className="font-medium capitalize">
             Dezembro
           </Text>{' '}
           <Text size="md" className="text-gray200">
@@ -34,7 +31,7 @@ export function Calendar() {
       </div>
       <table
         id="calendarBody"
-        className="w-[100%] font-default border-separate border-spacing-1 table-fixed gap-2"
+        className="w-full font-default border-separate border-spacing-1 table-fixed gap-2"
       >
         <thead>
           <tr>

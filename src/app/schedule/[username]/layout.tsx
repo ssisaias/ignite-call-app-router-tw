@@ -15,7 +15,7 @@ export default function SchedulesLayout({
       id="Container"
       className="min-h-screen overflow-hidden flex flex-col items-center"
     >
-      <SchedulesHeader username={params.username} />
+      <SchedulesHeader username={''} />
       {children}
     </main>
   )
