@@ -7,7 +7,7 @@ import { useState } from 'react'
 
 export default function CalendarWrapper() {
   // const [isDateSelected, setIsDateSelected] = useState(false)
-  const isDateSelected = true
+  const isDateSelected = false
   const timePickerOpen = clsx({
     'grid grid-cols-1 md:grid-cols-[1fr,280px] max-w-[900px]': isDateSelected,
     'grid grid-cols-1 max-w-[560px]': !isDateSelected,
