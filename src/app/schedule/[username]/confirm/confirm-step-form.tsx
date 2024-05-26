@@ -5,16 +5,35 @@ import { Button } from '@/components/Button'
 import { Text } from '@/components/Text'
 import { TextArea } from '@/components/TextArea'
 import { TextInput } from '@/components/TextInput'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarBlank, Clock } from '@phosphor-icons/react/dist/ssr'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+
+const confirmFormSchema = z.object({
+  name: z.string().min(3, { message: 'Nome deve ter pelo menos 3 caracteres' }),
+  email: z.string().email({ message: 'Digite um email válido' }),
+  observations: z.string().nullable(),
+})
+
+type ConfirmFormData = z.infer<typeof confirmFormSchema>
 
 export default function ConfirmStepForm() {
-  function handleConfirmScheduling() {}
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm<ConfirmFormData>({ resolver: zodResolver(confirmFormSchema) })
+
+  function handleConfirmScheduling(data: ConfirmFormData) {
+    console.log(data)
+  }
 
   return (
     <Box
       as={'form'}
       id="ConfirmForm"
-      onSubmit={handleConfirmScheduling}
+      onSubmit={handleSubmit(handleConfirmScheduling)}
       className="md:w-[540px] max-w-[540px] mt-6 mx-auto mb-0 flex flex-col gap-4 [&_label]:flex [&_label]:flex-col [&_label]:gap-2"
     >
       <div
@@ -30,29 +49,41 @@ export default function ConfirmStepForm() {
       </div>
       <label>
         <Text size="sm">Nome Completo</Text>
-        <TextInput placeholder="Seu nome"></TextInput>
+        <TextInput placeholder="Seu nome" {...register('name')}></TextInput>
+        {errors.name && <FormError>{errors.name.message}</FormError>}
       </label>
 
       <label>
         <Text size="sm">Endereço de email</Text>
-        <TextInput type="email" placeholder="email@exemplo.com"></TextInput>
+        <TextInput
+          type="email"
+          placeholder="email@exemplo.com"
+          {...register('email')}
+        ></TextInput>
+        {errors.email && <FormError>{errors.email.message}</FormError>}
       </label>
 
       <label>
         <Text size="sm">Observações</Text>
-        <TextArea className="w-full"></TextArea>
+        <TextArea className="w-full" {...register('observations')}></TextArea>
       </label>
 
       <div id="FormActions" className="flex justify-end gap-2 mt-2">
         <Button type="button" variant="tertiary">
           Cancelar
         </Button>
-        <Button type="submit">Confirmar</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          Confirmar
+        </Button>
       </div>
     </Box>
   )
 }
 
 function FormError({ children }: { children: React.ReactNode }) {
-  return <Text className="text-destructive-red">{children}</Text>
+  return (
+    <Text className="text-destructive-100" size="sm">
+      {children}
+    </Text>
+  )
 }
