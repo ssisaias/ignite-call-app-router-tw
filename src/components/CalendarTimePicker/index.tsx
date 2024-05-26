@@ -5,7 +5,7 @@ export default function TimePicker() {
   return (
     <div
       id="TimePicker"
-      className="mt-4 pt-6 px-6 pb-0 border-l-[1px] border-l-gray600 overflow-y-scroll absolute top-0 bottom-0 right-0 w-[280px]"
+      className="mt-4 pt-6 px-6 pb-0 md:border-l-[1px] md:border-l-gray600 overflow-y-scroll md:absolute md:w-[280px] top-0 bottom-0 right-0 relative w-full"
     >
       <Text className="font-medium">
         Terça Feira, <span className="text-gray200">22 de Setembro</span>
