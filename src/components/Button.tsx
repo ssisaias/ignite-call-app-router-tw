@@ -15,7 +15,7 @@ export function Button(props: ButtonProps) {
       !props.variant || props.variant === 'primary',
     'text-ignite300 bg-none border-2 border-solid border-ignite500 hover:enabled:bg-ignite500 hover:text-white disabled:border-gray-200 disabled:text-gray-200 hover:disabled:bg-gray-200 hover:disabled:text-gray-600':
       props.variant === 'secondary',
-    'text-gray-100 bg-none hover:enabled:text-white disabled:text-gray-200 disabled:border-gray-200 hover:border-2':
+    'text-gray-100 bg-none hover:enabled:text-white disabled:text-gray-200 disabled:border-gray-200 border-2 border-transparent hover:border-2 hover:border-gray200':
       props.variant === 'tertiary',
   })
   const size = clsx({

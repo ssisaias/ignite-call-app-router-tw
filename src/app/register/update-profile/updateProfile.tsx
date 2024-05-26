@@ -52,7 +52,7 @@ export function UpdateProfileForm({ session }: UpdateProfileFormProps) {
       <Box
         id="UpdateProfileForm"
         as={'form'}
-        className="mt-6 flex flex-col gap-4"
+        className="mt-6 flex flex-col gap-4 min-w-[94]"
         onSubmit={handleSubmit(handleUpdateProfile)}
       >
         <label className="flex flex-col gap-2">
@@ -65,7 +65,7 @@ export function UpdateProfileForm({ session }: UpdateProfileFormProps) {
 
         <label className="flex flex-col gap-2">
           <Text size="sm">Sobre você</Text>
-          <TextArea {...register('bio')}></TextArea>
+          <TextArea {...register('bio')} className="w-full"></TextArea>
           <Text size="xs" className="text-gray200">
             Fale um pouco sobre você.
           </Text>

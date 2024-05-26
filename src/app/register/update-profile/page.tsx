@@ -15,7 +15,10 @@ export default async function UpdateProfile() {
       id="Container"
       className="min-h-screen overflow-hidden flex flex-col items-center"
     >
-      <div id="Header" className="max-w-[572px] mt-16 ml-4 mr-4 self-center">
+      <div
+        id="Header"
+        className="w-full max-w-[572px] mt-16 ml-4 mr-4 self-center"
+      >
         <Heading as={'strong'} className="leading-base">
           Quase lá!
         </Heading>
