@@ -47,7 +47,7 @@ export default function SchedulesHeader({ username }: SchedulesHeaderProps) {
       <Text className="text-gray200" size="md">
         {userInfo?.bio || (
           <Link href="https://thispersondoesnotexist.com/">
-            you do not exist
+            this person does not exist
           </Link>
         )}
       </Text>
