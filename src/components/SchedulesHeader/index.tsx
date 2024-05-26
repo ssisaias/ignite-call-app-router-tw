@@ -32,7 +32,7 @@ export default function SchedulesHeader({ username }: SchedulesHeaderProps) {
   return (
     <div
       id="userHeader"
-      className="mt-12 w-full flex flex-col items-center justify-center"
+      className="mt-10 w-full flex flex-col items-center justify-center"
     >
       <div>
         {userInfo ? (
