@@ -3,7 +3,6 @@
 import { getPublicUserInfo } from '@/lib/actions/get-user-calendar-action'
 import { Heading } from '../Heading'
 import { Text } from '../Text'
-import { usePathname } from 'next/navigation'
 import { Avatar } from '../Avatar'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -16,13 +15,15 @@ interface UserInfo {
   avatar_url: string | null
 }
 
-export default function SchedulesHeader() {
-  const path = usePathname()
+interface SchedulesHeaderProps {
+  username?: string | undefined
+}
+
+export default function SchedulesHeader({ username }: SchedulesHeaderProps) {
   const [userInfo, setUserInfo] = useState<null | UserInfo>(null)
-  const username = path.replace('/schedule/', '')
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const data = await getPublicUserInfo(username)
+      const data = await getPublicUserInfo(username || '')
       setUserInfo(data)
     }
     fetchUserInfo()
