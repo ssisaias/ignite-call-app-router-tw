@@ -6,19 +6,21 @@ import clsx from 'clsx'
 import { useState } from 'react'
 
 export default function CalendarWrapper() {
-  // const [isDateSelected, setIsDateSelected] = useState(false)
-  const isDateSelected = false
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+
+  const isDateSelected = !!selectedDate
+
   const timePickerOpen = clsx({
-    'grid grid-cols-1 md:grid-cols-[1fr,280px] max-w-[900px]': isDateSelected,
-    'grid grid-cols-1 max-w-[560px]': !isDateSelected,
+    'grid grid-cols-1 md:grid-cols-[1fr,280px] w-6/12': isDateSelected,
+    'grid grid-cols-1 w-4/12': !isDateSelected,
   })
   return (
     <Box
       id="Container"
       as={'div'}
-      className={`${timePickerOpen} mt-4 grid relative p-0 `}
+      className={`${timePickerOpen} mt-4 grid relative p-0 mb-auto`}
     >
-      <Calendar />
+      <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
       {isDateSelected && <TimePicker />}
     </Box>
   )
