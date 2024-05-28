@@ -21,13 +21,13 @@ interface SchedulesHeaderProps {
 
 export default function SchedulesHeader({ username }: SchedulesHeaderProps) {
   const [userInfo, setUserInfo] = useState<null | UserInfo>(null)
-  /* useEffect(() => {
+  useEffect(() => {
     const fetchUserInfo = async () => {
       const data = await getPublicUserInfo(username || '')
       setUserInfo(data)
     }
     fetchUserInfo()
-  }, [username]) */
+  }, [username])
 
   return (
     <div
@@ -35,23 +35,21 @@ export default function SchedulesHeader({ username }: SchedulesHeaderProps) {
       className="mt-10 w-full flex flex-col items-center justify-center"
     >
       <div>
-        {/* {userInfo ? (
+        {userInfo ? (
           <Avatar src={userInfo.avatar_url || ''} />
         ) : (
           <Avatar src="https://thispersondoesnotexist.com/" />
-        )} */}
-        b
+        )}
       </div>
       <Heading className="leading-base font-bold" as={'h1'} size="2xl">
         {userInfo?.name}
       </Heading>
       <Text className="text-gray200" size="md">
-        {/* {userInfo?.bio || (
+        {userInfo?.bio || (
           <Link href="https://thispersondoesnotexist.com/">
             this person does not exist
           </Link>
-        )} */}
-        a
+        )}
       </Text>
     </div>
   )
