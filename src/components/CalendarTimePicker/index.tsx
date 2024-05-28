@@ -1,14 +1,19 @@
 import { Text } from '../Text'
 import TimePickerItem from './time-picker-btn'
 
-export default function TimePicker() {
+interface TimePickerProps {
+  weekDay?: string | null
+  dateString?: string | null
+}
+
+export default function TimePicker({ weekDay, dateString }: TimePickerProps) {
   return (
     <div
       id="TimePicker"
       className="mt-4 pt-6 px-6 pb-0 md:border-l-[1px] md:border-l-gray600 overflow-y-scroll md:absolute md:w-[280px] top-0 bottom-0 right-0 relative w-full"
     >
-      <Text className="font-medium">
-        Terça Feira, <span className="text-gray200">22 de Setembro</span>
+      <Text className="font-medium capitalize">
+        {weekDay} <span className="text-gray200 ml-1">{dateString}</span>
       </Text>
 
       <div id="TimePickerList" className="mt-3 grid grid-cols-1 gap-2">
