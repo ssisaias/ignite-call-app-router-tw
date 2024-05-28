@@ -1,0 +1,71 @@
+/* eslint-disable camelcase */
+import { auth } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
+import dayjs from 'dayjs'
+import { NextRequest, NextResponse } from 'next/server'
+
+type Params = {
+  username: string
+}
+
+export async function GET(request: NextRequest, context: { params: Params }) {
+  const session = await auth()
+
+  if (!session?.user) return NextResponse.json(null, { status: 401 })
+
+  const username = context.params.username
+  const date = request.nextUrl.searchParams.get('date')
+
+  if (!date) {
+    return NextResponse.json(
+      {
+        message: 'Date is required',
+      },
+      { status: 400 },
+    )
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { username },
+  })
+
+  if (!user) {
+    return NextResponse.json(
+      {
+        message: 'User not found',
+      },
+      { status: 404 },
+    )
+  }
+
+  const referenceDate = dayjs(String(date))
+  const isPastDate = referenceDate.endOf('day').isBefore(new Date())
+
+  if (isPastDate) {
+    return NextResponse.json({ availability: [] })
+  }
+
+  const userAvailability = await prisma.userTimeInterval.findFirst({
+    where: {
+      user_id: user.id,
+      week_day: referenceDate.get('day'),
+    },
+  })
+
+  if (!userAvailability) {
+    return NextResponse.json({ availability: [] })
+  }
+
+  const { time_start_in_minutes, time_end_in_minutes } = userAvailability
+
+  const startHour = time_start_in_minutes / 60
+  const endHour = time_end_in_minutes / 60
+
+  const possibleTimes = Array.from({ length: endHour - startHour }).map(
+    (_, i) => {
+      return startHour + i
+    },
+  )
+
+  return NextResponse.json(possibleTimes)
+}

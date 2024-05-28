@@ -17,7 +17,7 @@ export default function CalendarWrapper() {
     : null
 
   const timePickerOpen = clsx({
-    'grid grid-cols-1 md:grid-cols-[1fr,280px] w-6/12': isDateSelected,
+    'grid grid-cols-1 md:grid-cols-[1fr,280px] w-7/12': isDateSelected,
     'grid grid-cols-1 w-4/12': !isDateSelected,
   })
 
