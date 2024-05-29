@@ -1,10 +1,13 @@
-import { CaretLeft, CaretRight } from '@phosphor-icons/react/dist/ssr'
-import { Text } from '../Text'
-import { getWeekDays } from '@/lib/utils/get-week-days'
-import CalendarDay from './calendar-day'
-import { useMemo, useState } from 'react'
-import dayjs from 'dayjs'
 import '@/lib/dayjs'
+
+import { CaretLeft, CaretRight } from '@phosphor-icons/react/dist/ssr'
+import dayjs from 'dayjs'
+import { useMemo, useState } from 'react'
+
+import { getWeekDays } from '@/lib/utils/get-week-days'
+
+import { Text } from '../Text'
+import CalendarDay from './calendar-day'
 
 interface CalendarWeek {
   week: number

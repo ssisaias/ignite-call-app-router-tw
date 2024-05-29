@@ -1,18 +1,19 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ArrowRight } from '@phosphor-icons/react'
+import { useRouter } from 'next/navigation'
+import { Session } from 'next-auth'
+import { useForm } from 'react-hook-form'
+import { toast, Toaster } from 'sonner'
+import * as z from 'zod'
+
 import { Avatar } from '@/components/Avatar'
 import { Box } from '@/components/Box'
 import { Button } from '@/components/Button'
 import { Text } from '@/components/Text'
 import { TextArea } from '@/components/TextArea'
 import { api } from '@/lib/axios'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowRight } from '@phosphor-icons/react'
-import { Session } from 'next-auth'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { Toaster, toast } from 'sonner'
-import * as z from 'zod'
 
 const updateProfileFormSchema = z.object({
   bio: z.string(),

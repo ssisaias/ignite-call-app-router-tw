@@ -1,4 +1,10 @@
 'use client'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
+import { useRouter } from 'next/navigation'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { z } from 'zod'
+
 import { Button } from '@/components/Button'
 import { Checkbox } from '@/components/Checkbox'
 import { Text } from '@/components/Text'
@@ -6,11 +12,6 @@ import { TextInput } from '@/components/TextInput'
 import { api } from '@/lib/axios'
 import { convertTimeStringToMinutes } from '@/lib/utils/convert-time-to-minutes'
 import { getWeekDays } from '@/lib/utils/get-week-days'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
-import { useRouter } from 'next/navigation'
-import { Controller, useFieldArray, useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 const timeIntervalsFormSchema = z.object({
   intervals: z

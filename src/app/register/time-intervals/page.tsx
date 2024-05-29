@@ -1,6 +1,7 @@
 import { Heading } from '@/components/Heading'
 import { Multistep } from '@/components/Multistep'
 import { Text } from '@/components/Text'
+
 import IntervalForm from './intervalForm'
 
 export default function Page() {

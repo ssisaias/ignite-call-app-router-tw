@@ -1,7 +1,8 @@
-import type { Adapter } from 'next-auth/adapters'
-import { prisma } from './prisma'
 import { Prisma } from '@prisma/client'
 import { NextRequest } from 'next/server'
+import type { Adapter } from 'next-auth/adapters'
+
+import { prisma } from './prisma'
 
 interface MyPrismaAdapterProps {
   req: undefined | NextRequest

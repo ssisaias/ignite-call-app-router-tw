@@ -1,11 +1,12 @@
 'use client'
-import { Button } from '@/components/Button'
 import { ArrowRight, Calendar } from '@phosphor-icons/react/dist/ssr'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Session } from 'next-auth'
+
+import { Box } from '@/components/Box'
+import { Button } from '@/components/Button'
 import { Text } from '@/components/Text'
 import { SignIn } from '@/lib/actions/auth-action'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Box } from '@/components/Box'
-import { Session } from 'next-auth'
 
 type ConnectFormProps = {
   session: Session | null

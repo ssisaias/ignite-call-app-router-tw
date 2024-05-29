@@ -1,6 +1,6 @@
 'use client'
-import { ElementType } from 'react'
 import { clsx } from 'clsx'
+import { ElementType } from 'react'
 
 export interface TextProps {
   size?:

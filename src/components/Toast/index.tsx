@@ -1,5 +1,6 @@
 'use client'
-import { Toaster, toast } from 'sonner'
+import { toast, Toaster } from 'sonner'
+
 import { Button } from '../Button'
 
 export interface ToastProps {

@@ -1,7 +1,8 @@
 import { Heading } from '@/components/Heading'
-import { RegisterForm } from './registerForm'
 import { Multistep } from '@/components/Multistep'
 import { Text } from '@/components/Text'
+
+import { RegisterForm } from './registerForm'
 
 export default async function Page() {
   return (

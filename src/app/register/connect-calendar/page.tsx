@@ -1,8 +1,9 @@
 import { Heading } from '@/components/Heading'
 import { Multistep } from '@/components/Multistep'
 import { Text } from '@/components/Text'
-import { ConnectForm } from './connectForm'
 import { auth } from '@/lib/auth'
+
+import { ConnectForm } from './connectForm'
 
 export default async function Page() {
   const session = await auth()

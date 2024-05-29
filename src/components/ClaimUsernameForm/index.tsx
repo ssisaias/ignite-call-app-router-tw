@@ -1,14 +1,15 @@
 'use client'
-import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
-import { Button } from '../Button'
-import { TextInput } from '../TextInput'
-import { Box } from '../Box'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Text } from '../Text'
+import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+
+import { Box } from '../Box'
+import { Button } from '../Button'
+import { Text } from '../Text'
+import { TextInput } from '../TextInput'
 
 const claimUsernameFormSchema = z.object({
   username: z

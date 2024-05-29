@@ -1,18 +1,19 @@
 'use client'
 
-import { Box } from '@/components/Box'
-import { Button } from '@/components/Button'
-import { Text } from '@/components/Text'
-import { TextInput } from '@/components/TextInput'
-import { api } from '@/lib/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from '@phosphor-icons/react'
 import { AxiosError } from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Toaster, toast } from 'sonner'
+import { toast, Toaster } from 'sonner'
 import * as z from 'zod'
+
+import { Box } from '@/components/Box'
+import { Button } from '@/components/Button'
+import { Text } from '@/components/Text'
+import { TextInput } from '@/components/TextInput'
+import { api } from '@/lib/axios'
 
 const registerFormSchema = z.object({
   username: z

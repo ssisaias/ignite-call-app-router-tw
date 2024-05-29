@@ -1,6 +1,7 @@
 'use client'
-import { Text } from './Text'
 import { Children, ElementType } from 'react'
+
+import { Text } from './Text'
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   content?: string

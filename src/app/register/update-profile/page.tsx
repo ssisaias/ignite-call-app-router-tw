@@ -1,8 +1,9 @@
 import { Heading } from '@/components/Heading'
 import { Multistep } from '@/components/Multistep'
 import { Text } from '@/components/Text'
-import { UpdateProfileForm } from './updateProfile'
 import { auth } from '@/lib/auth'
+
+import { UpdateProfileForm } from './updateProfile'
 
 export default async function UpdateProfile() {
   const session = await auth()

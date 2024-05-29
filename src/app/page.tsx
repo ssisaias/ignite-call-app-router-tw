@@ -1,9 +1,10 @@
+import Image from 'next/image'
+
+import { ClaimUsernameForm } from '@/components/ClaimUsernameForm'
 import { Heading } from '@/components/Heading'
 import { Text } from '@/components/Text'
 
 import previewImg from '../assets/homepreview.png'
-import Image from 'next/image'
-import { ClaimUsernameForm } from '@/components/ClaimUsernameForm'
 
 export default function Home() {
   return (

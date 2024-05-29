@@ -1,14 +1,15 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import { CalendarBlank, Clock } from '@phosphor-icons/react/dist/ssr'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+
 import { Box } from '@/components/Box'
 import { Button } from '@/components/Button'
 import { Text } from '@/components/Text'
 import { TextArea } from '@/components/TextArea'
 import { TextInput } from '@/components/TextInput'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { CalendarBlank, Clock } from '@phosphor-icons/react/dist/ssr'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 const confirmFormSchema = z.object({
   name: z.string().min(3, { message: 'Nome deve ter pelo menos 3 caracteres' }),

@@ -1,6 +1,7 @@
 'use client'
 import * as TooltipRdx from '@radix-ui/react-tooltip'
 import React from 'react'
+
 import { Text, TextProps } from '../Text'
 
 export interface TooltipProps
