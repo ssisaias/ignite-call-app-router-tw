@@ -27,11 +27,7 @@ interface BlockedDates {
   blockedWeekDays: number[]
 }
 
-export function Calendar({
-  selectedDate,
-  username,
-  onDateSelected,
-}: CalendarProps) {
+export function Calendar({ username, onDateSelected }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(() => {
     return dayjs().set('date', 1)
   })
