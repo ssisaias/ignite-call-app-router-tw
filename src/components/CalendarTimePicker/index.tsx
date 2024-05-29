@@ -1,12 +1,19 @@
+import { Availability } from '@/app/schedule/[username]/calendar/calendar-wrapper'
+
 import { Text } from '../Text'
 import TimePickerItem from './time-picker-btn'
 
 interface TimePickerProps {
   weekDay?: string | null
   dateString?: string | null
+  availability?: Availability
 }
 
-export default function TimePicker({ weekDay, dateString }: TimePickerProps) {
+export default function TimePicker({
+  weekDay,
+  dateString,
+  availability,
+}: TimePickerProps) {
   return (
     <div
       id="TimePicker"
@@ -17,19 +24,21 @@ export default function TimePicker({ weekDay, dateString }: TimePickerProps) {
       </Text>
 
       <div id="TimePickerList" className="mt-3 grid grid-cols-1 gap-2">
-        <TimePickerItem>08:00</TimePickerItem>
-        <TimePickerItem>09:00</TimePickerItem>
-        <TimePickerItem disabled>10:00</TimePickerItem>
-        <TimePickerItem>11:00</TimePickerItem>
-        <TimePickerItem>12:00</TimePickerItem>
-        <TimePickerItem disabled>13:00</TimePickerItem>
-        <TimePickerItem>14:00</TimePickerItem>
-        <TimePickerItem>15:00</TimePickerItem>
-        <TimePickerItem>16:00</TimePickerItem>
-        <TimePickerItem>17:00</TimePickerItem>
-        <TimePickerItem>18:00</TimePickerItem>
-        <TimePickerItem>19:00</TimePickerItem>
-        <TimePickerItem>20:00</TimePickerItem>
+        {availability?.possibleTimes &&
+          availability?.possibleTimes.map((hour) => {
+            return (
+              <TimePickerItem
+                key={hour}
+                disabled={!availability?.availableTimes.includes(hour)}
+              >
+                {String(hour).padStart(2, '0')}:00h
+              </TimePickerItem>
+            )
+          })}
+        {!(
+          availability?.possibleTimes ||
+          availability?.possibleTimes?.length === 0
+        ) && <Text className="text-gray200">No available times</Text>}
       </div>
     </div>
   )

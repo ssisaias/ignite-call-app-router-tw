@@ -8,13 +8,18 @@ import { Calendar } from '@/components/Calendar'
 import TimePicker from '@/components/CalendarTimePicker'
 import { api } from '@/lib/axios'
 
+export interface Availability {
+  possibleTimes: number[]
+  availableTimes: number[]
+}
+
 export default function CalendarWrapper({
   username,
 }: {
   username?: string | null
 }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [availability, setAvailability] = useState(null)
+  const [availability, setAvailability] = useState<Availability | null>(null)
 
   const isDateSelected = !!selectedDate
 
@@ -39,7 +44,7 @@ export default function CalendarWrapper({
         },
       })
       .then((res) => {
-        console.log(res.data)
+        setAvailability(res.data)
       })
   }, [selectedDate, username])
 
@@ -51,7 +56,11 @@ export default function CalendarWrapper({
     >
       <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
       {isDateSelected && (
-        <TimePicker weekDay={weekDay} dateString={dateString} />
+        <TimePicker
+          weekDay={weekDay}
+          dateString={dateString}
+          availability={availability}
+        />
       )}
     </Box>
   )
