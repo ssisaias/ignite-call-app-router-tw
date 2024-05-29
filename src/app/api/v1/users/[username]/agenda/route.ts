@@ -2,7 +2,6 @@
 import dayjs from 'dayjs'
 import { NextRequest, NextResponse } from 'next/server'
 
-import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 type Params = {
@@ -10,10 +9,6 @@ type Params = {
 }
 
 export async function GET(request: NextRequest, context: { params: Params }) {
-  const session = await auth()
-
-  if (!session?.user) return NextResponse.json(null, { status: 401 })
-
   const username = context.params.username
   const date = request.nextUrl.searchParams.get('date')
 

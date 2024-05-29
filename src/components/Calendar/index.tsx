@@ -2,8 +2,9 @@ import '@/lib/dayjs'
 
 import { CaretLeft, CaretRight } from '@phosphor-icons/react/dist/ssr'
 import dayjs from 'dayjs'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
+import { api } from '@/lib/axios'
 import { getWeekDays } from '@/lib/utils/get-week-days'
 
 import { Text } from '../Text'
@@ -18,13 +19,40 @@ type CalendarWeeks = Array<CalendarWeek>
 
 interface CalendarProps {
   selectedDate?: Date | null
+  username?: string | null
   onDateSelected: (date: Date) => void
 }
 
-export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
+interface BlockedDates {
+  blockedWeekDays: number[]
+}
+
+export function Calendar({
+  selectedDate,
+  username,
+  onDateSelected,
+}: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(() => {
     return dayjs().set('date', 1)
   })
+
+  const [blockedDays, setBlockedDays] = useState<BlockedDates>({
+    blockedWeekDays: [],
+  })
+
+  useEffect(() => {
+    api
+      .get(`/users/${username}/blocked-dates`, {
+        params: {
+          year: dayjs(currentDate).format('YYYY'),
+          month: dayjs(currentDate).format('MM'),
+        },
+      })
+      .then((res) => {
+        console.log(res.data)
+        setBlockedDays(res.data)
+      })
+  }, [currentDate, username])
 
   function handlePreviousMonth() {
     const previousMonth = currentDate.subtract(1, 'month')
@@ -74,7 +102,12 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
         return { date, disabled: true }
       }),
       ...daysInMonthArray.map((date) => {
-        return { date, disabled: date.endOf('day').isBefore(new Date()) }
+        return {
+          date,
+          disabled:
+            date.endOf('day').isBefore(new Date()) ||
+            blockedDays?.blockedWeekDays.includes(date.get('day')),
+        }
       }),
       ...nextMonthFillDays.map((date) => {
         return { date, disabled: true }
@@ -96,7 +129,7 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
     )
 
     return calendarWeeks
-  }, [currentDate])
+  }, [currentDate, blockedDays])
 
   return (
     <div id="calendarContainer" className="flex flex-col gap-6 p-6">

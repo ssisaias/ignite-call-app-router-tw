@@ -54,7 +54,11 @@ export default function CalendarWrapper({
       as={'div'}
       className={`${timePickerOpen} mt-4 grid relative p-0 mb-auto`}
     >
-      <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
+      <Calendar
+        selectedDate={selectedDate}
+        onDateSelected={setSelectedDate}
+        username={username}
+      />
       {isDateSelected && (
         <TimePicker
           weekDay={weekDay}

@@ -6,7 +6,7 @@ import TimePickerItem from './time-picker-btn'
 interface TimePickerProps {
   weekDay?: string | null
   dateString?: string | null
-  availability?: Availability
+  availability?: Availability | null
 }
 
 export default function TimePicker({
