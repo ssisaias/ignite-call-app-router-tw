@@ -1,11 +1,13 @@
 'use client'
 
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
 import { getPublicUserInfo } from '@/lib/actions/get-user-calendar-action'
+
+import { Avatar } from '../Avatar'
 import { Heading } from '../Heading'
 import { Text } from '../Text'
-import { Avatar } from '../Avatar'
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
 
 interface UserInfo {
   id: string

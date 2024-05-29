@@ -1,12 +1,12 @@
 'use client'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
+
 import { Box } from '@/components/Box'
 import { Calendar } from '@/components/Calendar'
 import TimePicker from '@/components/CalendarTimePicker'
 import { api } from '@/lib/axios'
-import clsx from 'clsx'
-import dayjs from 'dayjs'
-
-import { useEffect, useState } from 'react'
 
 export default function CalendarWrapper({
   username,
