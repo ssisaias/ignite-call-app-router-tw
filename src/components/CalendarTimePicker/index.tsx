@@ -1,4 +1,4 @@
-import { SpinnerBall } from '@phosphor-icons/react/dist/ssr'
+import { SpinnerGap } from '@phosphor-icons/react/dist/ssr'
 
 import { Availability } from '@/app/schedule/[username]/calendar/calendar-wrapper'
 
@@ -9,7 +9,7 @@ interface TimePickerProps {
   loading?: boolean | null | undefined
   weekDay?: string | null
   dateString?: string | null
-  availability?: Availability | null
+  availability?: Availability | null | undefined
 }
 
 export default function TimePicker({
@@ -23,9 +23,9 @@ export default function TimePicker({
       id="TimePicker"
       className="mt-4 pt-6 px-6 pb-0 md:border-l-[1px] md:border-l-gray600 overflow-y-scroll md:absolute md:w-[280px] top-0 bottom-0 right-0 relative w-full"
     >
-      {loading ? (
+      {loading || !availability?.availableTimes ? (
         <div className="flex items-center justify-center">
-          <SpinnerBall size={32} className="text-gray-300" weight="fill" />
+          <SpinnerGap size={32} className="text-gray-300" weight="fill" />
           <Text className="ml-2 text-gray-300">Please wait...</Text>
         </div>
       ) : (
@@ -40,7 +40,7 @@ export default function TimePicker({
                 return (
                   <TimePickerItem
                     key={hour}
-                    disabled={!availability?.availableTimes.includes(hour)}
+                    disabled={!availability?.availableTimes!.includes(hour)}
                   >
                     {String(hour).padStart(2, '0')}:00h
                   </TimePickerItem>

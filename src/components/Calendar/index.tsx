@@ -1,10 +1,15 @@
 import '@/lib/dayjs'
 
-import { CaretLeft, CaretRight } from '@phosphor-icons/react/dist/ssr'
+import {
+  CaretLeft,
+  CaretRight,
+  SpinnerGap,
+} from '@phosphor-icons/react/dist/ssr'
 import dayjs from 'dayjs'
+import { useAction } from 'next-safe-action/hooks'
 import { useEffect, useMemo, useState } from 'react'
 
-import { api } from '@/lib/axios'
+import { getUserBlockedDates } from '@/lib/actions/get-user-blocked-dates'
 import { getWeekDays } from '@/lib/utils/get-week-days'
 
 import { Text } from '../Text'
@@ -12,7 +17,7 @@ import CalendarDay from './calendar-day'
 
 interface CalendarWeek {
   week: number
-  days: Array<{ date: dayjs.Dayjs; disabled: boolean }>
+  days: Array<{ date: dayjs.Dayjs; disabled: boolean | undefined }>
 }
 
 type CalendarWeeks = Array<CalendarWeek>
@@ -23,32 +28,32 @@ interface CalendarProps {
   onDateSelected: (date: Date) => void
 }
 
-interface BlockedDates {
-  blockedWeekDays: number[]
-}
-
 export function Calendar({ username, onDateSelected }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(() => {
     return dayjs().set('date', 1)
   })
 
-  const [blockedDays, setBlockedDays] = useState<BlockedDates>({
-    blockedWeekDays: [],
+  const {
+    execute,
+    isExecuting,
+    result: blockedDays,
+  } = useAction(getUserBlockedDates, {
+    onSuccess: (data) => {
+      console.log('SUCCESS')
+      console.log(data)
+    },
   })
 
   useEffect(() => {
-    api
-      .get(`/users/${username}/blocked-dates`, {
-        params: {
-          year: dayjs(currentDate).format('YYYY'),
-          month: dayjs(currentDate).format('MM'),
-        },
-      })
-      .then((res) => {
-        console.log(res.data)
-        setBlockedDays(res.data)
-      })
-  }, [currentDate, username])
+    if (!username) {
+      return
+    }
+    execute({
+      username,
+      year: dayjs(currentDate).format('YYYY'),
+      month: dayjs(currentDate).format('MM'),
+    })
+  }, [currentDate, execute, username])
 
   function handlePreviousMonth() {
     const previousMonth = currentDate.subtract(1, 'month')
@@ -102,7 +107,7 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
           date,
           disabled:
             date.endOf('day').isBefore(new Date()) ||
-            blockedDays?.blockedWeekDays.includes(date.get('day')),
+            blockedDays?.data?.blockedWeekDays.includes(date.get('day')),
         }
       }),
       ...nextMonthFillDays.map((date) => {
@@ -128,70 +133,82 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
   }, [currentDate, blockedDays])
 
   return (
-    <div id="calendarContainer" className="flex flex-col gap-6 p-6">
-      <div id="calendarHeader" className="flex justify-between items-center">
-        <div id="calendarTitle" className="flex gap-2">
-          <Text size="md" className="font-medium capitalize">
-            {currentMonth}
-          </Text>{' '}
-          <Text size="md" className="text-gray200">
-            {currentYear}
-          </Text>{' '}
+    <>
+      {isExecuting || !blockedDays?.data?.blockedWeekDays ? (
+        <div className="flex items-center justify-center">
+          <SpinnerGap size={32} className="text-gray-300" weight="fill" />
+          <Text className="ml-2 text-gray-300">Please wait...</Text>
         </div>
-        <div
-          id="calendarActions"
-          className="flex gap-2 text-gray200 shadow-none"
-        >
-          <button
-            onClick={handlePreviousMonth}
-            title="Previous month"
-            className="cursor-pointer rounded-sm border-2 border-transparent hover:border-gray100 focus:border-gray100"
+      ) : (
+        <div id="calendarContainer" className="flex flex-col gap-6 p-6">
+          <div
+            id="calendarHeader"
+            className="flex justify-between items-center"
           >
-            <CaretLeft className="hover:text-gray100 hover:fill-current" />
-          </button>
-          <button
-            onClick={handleNextMonth}
-            title="Next month"
-            className="cursor-pointer rounded-sm border-2 border-transparent hover:border-gray100 focus:border-gray100"
+            <div id="calendarTitle" className="flex gap-2">
+              <Text size="md" className="font-medium capitalize">
+                {currentMonth}
+              </Text>{' '}
+              <Text size="md" className="text-gray200">
+                {currentYear}
+              </Text>{' '}
+            </div>
+            <div
+              id="calendarActions"
+              className="flex gap-2 text-gray200 shadow-none"
+            >
+              <button
+                onClick={handlePreviousMonth}
+                title="Previous month"
+                className="cursor-pointer rounded-sm border-2 border-transparent hover:border-gray100 focus:border-gray100"
+              >
+                <CaretLeft className="hover:text-gray100 hover:fill-current" />
+              </button>
+              <button
+                onClick={handleNextMonth}
+                title="Next month"
+                className="cursor-pointer rounded-sm border-2 border-transparent hover:border-gray100 focus:border-gray100"
+              >
+                <CaretRight className="hover:text-gray100 hover:fill-current" />
+              </button>
+            </div>
+          </div>
+          <table
+            id="calendarBody"
+            className="w-full font-default border-separate border-spacing-1 table-fixed gap-2"
           >
-            <CaretRight className="hover:text-gray100 hover:fill-current" />
-          </button>
-        </div>
-      </div>
-      <table
-        id="calendarBody"
-        className="w-full font-default border-separate border-spacing-1 table-fixed gap-2"
-      >
-        <thead>
-          <tr>
-            {shortWeekDays.map((day) => (
-              <th className="text-gray200 font-medium text-sm" key={day}>
-                {day}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="before:content-['.'] before:leading-3 before:block before:text-gray800">
-          {calendarWeeks.map((week) => {
-            return (
-              <tr key={week.week}>
-                {week.days.map(({ date, disabled }) => {
-                  return (
-                    <td key={date.toString()}>
-                      <CalendarDay
-                        onClick={() => onDateSelected(date.toDate())}
-                        disabled={disabled}
-                      >
-                        {date.get('date')}
-                      </CalendarDay>
-                    </td>
-                  )
-                })}
+            <thead>
+              <tr>
+                {shortWeekDays.map((day) => (
+                  <th className="text-gray200 font-medium text-sm" key={day}>
+                    {day}
+                  </th>
+                ))}
               </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
+            </thead>
+            <tbody className="before:content-['.'] before:leading-3 before:block before:text-gray800">
+              {calendarWeeks.map((week) => {
+                return (
+                  <tr key={week.week}>
+                    {week.days.map(({ date, disabled }) => {
+                      return (
+                        <td key={date.toString()}>
+                          <CalendarDay
+                            onClick={() => onDateSelected(date.toDate())}
+                            disabled={disabled ?? false}
+                          >
+                            {date.get('date')}
+                          </CalendarDay>
+                        </td>
+                      )
+                    })}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
   )
 }

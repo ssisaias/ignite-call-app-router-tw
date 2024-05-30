@@ -10,8 +10,8 @@ import TimePicker from '@/components/CalendarTimePicker'
 import { getUserAgenda } from '@/lib/actions/get-user-calendar'
 
 export interface Availability {
-  possibleTimes: number[]
-  availableTimes: number[]
+  possibleTimes?: number[] | undefined | null
+  availableTimes?: number[] | undefined | null
 }
 
 export default function CalendarWrapper({
@@ -20,7 +20,7 @@ export default function CalendarWrapper({
   username?: string | null
 }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  // const [availability, setAvailability] = useState<Availability | null>(null)
+
   const {
     execute,
     isExecuting,
@@ -62,7 +62,7 @@ export default function CalendarWrapper({
           loading={isExecuting}
           weekDay={weekDay}
           dateString={dateString}
-          availability={availability.data}
+          availability={availability.data!}
         />
       )}
     </Box>
