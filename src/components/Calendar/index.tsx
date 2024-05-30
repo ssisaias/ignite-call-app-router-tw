@@ -25,7 +25,7 @@ type CalendarWeeks = Array<CalendarWeek>
 interface CalendarProps {
   selectedDate?: Date | null
   username?: string | null
-  onDateSelected: (date: Date) => void
+  onDateSelected: (date: Date | null) => void
 }
 
 export function Calendar({ username, onDateSelected }: CalendarProps) {
@@ -56,11 +56,13 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
   }, [currentDate, execute, username])
 
   function handlePreviousMonth() {
+    onDateSelected(null)
     const previousMonth = currentDate.subtract(1, 'month')
     setCurrentDate(previousMonth)
   }
 
   function handleNextMonth() {
+    onDateSelected(null)
     const nextMonth = currentDate.add(1, 'month')
     setCurrentDate(nextMonth)
   }
