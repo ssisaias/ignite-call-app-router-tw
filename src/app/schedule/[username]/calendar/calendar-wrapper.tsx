@@ -1,12 +1,13 @@
 'use client'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import { useAction } from 'next-safe-action/hooks'
 import { useEffect, useState } from 'react'
 
 import { Box } from '@/components/Box'
 import { Calendar } from '@/components/Calendar'
 import TimePicker from '@/components/CalendarTimePicker'
-import { api } from '@/lib/axios'
+import { getUserAgenda } from '@/lib/actions/get-user-calendar'
 
 export interface Availability {
   possibleTimes: number[]
@@ -19,7 +20,12 @@ export default function CalendarWrapper({
   username?: string | null
 }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [availability, setAvailability] = useState<Availability | null>(null)
+  // const [availability, setAvailability] = useState<Availability | null>(null)
+  const {
+    execute,
+    isExecuting,
+    result: availability,
+  } = useAction(getUserAgenda)
 
   const isDateSelected = !!selectedDate
 
@@ -37,16 +43,8 @@ export default function CalendarWrapper({
     if (!selectedDate || !username) {
       return
     }
-    api
-      .get(`/users/${username}/agenda`, {
-        params: {
-          date: dayjs(selectedDate).format('YYYY-MM-DD'),
-        },
-      })
-      .then((res) => {
-        setAvailability(res.data)
-      })
-  }, [selectedDate, username])
+    execute({ username, date: dayjs(selectedDate).format('YYYY-MM-DD') })
+  }, [execute, selectedDate, username])
 
   return (
     <Box
@@ -61,9 +59,10 @@ export default function CalendarWrapper({
       />
       {isDateSelected && (
         <TimePicker
+          loading={isExecuting}
           weekDay={weekDay}
           dateString={dateString}
-          availability={availability}
+          availability={availability.data}
         />
       )}
     </Box>
