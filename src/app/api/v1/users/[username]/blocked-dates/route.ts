@@ -1,6 +1,10 @@
 /* eslint-disable camelcase */
+import dayjs from 'dayjs'
+import { and, eq, gt, lt } from 'drizzle-orm'
 import { NextRequest, NextResponse } from 'next/server'
 
+import { dz } from '@/lib/drizzle'
+import { schedulings } from '@/lib/dz/migrations/schema'
 import { prisma } from '@/lib/prisma'
 
 type Params = {
@@ -49,5 +53,25 @@ export async function GET(request: NextRequest, context: { params: Params }) {
     })
   })
 
-  return NextResponse.json({ blockedWeekDays })
+  const startDate = `${year}-${month}-01`
+  const startDateMsEpoch = new Date(startDate).getTime()
+  const endDate = `${year}-${month}-31`
+  const endDateMsEpoch = new Date(endDate).getTime()
+
+  const blockedWeekDatesRaw = await dz
+    .select()
+    .from(schedulings)
+    .where(
+      and(
+        eq(schedulings.user_id, user.id),
+        and(
+          gt(schedulings.date, String(startDateMsEpoch)),
+          lt(schedulings.date, String(endDateMsEpoch)),
+        ),
+      ),
+    )
+
+  console.log(blockedWeekDatesRaw)
+
+  return NextResponse.json({ blockedWeekDays, blockedWeekDatesRaw })
 }

@@ -44,5 +44,13 @@ export const getUserBlockedDates = actionClient
       })
     })
 
-    return { blockedWeekDays }
+    const blockedWeekDatesRaw = await prisma.$queryRaw`
+      SELECT *
+      FROM schedulings S
+
+      WHERE S.user_id = ${user.id}
+      AND S.date BETWEEN ${year}-${month}-01 AND ${year}-${month}-31
+    `
+
+    return { blockedWeekDays, blockedWeekDatesRaw }
   })
