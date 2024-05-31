@@ -1,6 +1,11 @@
 'use server'
+import { and, Column, eq, gt, gte, lt, sql } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/sqlite-core'
 import z from 'zod'
 
+import { dz } from '../drizzle'
+// eslint-disable-next-line camelcase
+import { schedulings, user_time_intervals } from '../dz/migrations/schema'
 import { prisma } from '../prisma'
 import { actionClient } from '../safe-action'
 
@@ -10,8 +15,12 @@ const schema = z.object({
   month: z.string(),
 })
 
-interface BlockedDates {
-  blockedWeekDays: number[]
+function getDay(col: Column) {
+  return sql<string>`STRFTIME('%d',${col}/1000,'unixepoch')`
+}
+
+function getWeekDay(col: Column) {
+  return sql<string>`STRFTIME('%w',${col}/1000,'unixepoch')`
 }
 
 export const getUserBlockedDates = actionClient
@@ -44,13 +53,35 @@ export const getUserBlockedDates = actionClient
       })
     })
 
-    const blockedWeekDatesRaw = await prisma.$queryRaw`
-      SELECT *
-      FROM schedulings S
+    const startDate = `${year}-${month}-01`
+    const startDateMsEpoch = new Date(startDate).getTime()
+    const endDate = `${year}-${month}-31`
+    const endDateMsEpoch = new Date(endDate).getTime()
 
-      WHERE S.user_id = ${user.id}
-      AND S.date BETWEEN ${year}-${month}-01 AND ${year}-${month}-31
-    `
+    const UTI = alias(user_time_intervals, 'UTI')
+    const blockedWeekDatesRaw = await dz
+      .select({
+        cDay: getDay(schedulings.date).as('cDay'),
+        amount: sql<number>`COUNT(*)`.as('amount'),
+        size: sql<string>`(UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60`.as(
+          'size',
+        ),
+      })
+      .from(schedulings)
+      .leftJoin(UTI, eq(getWeekDay(schedulings.date), UTI.week_day))
+      .where(
+        and(
+          eq(schedulings.user_id, user.id),
+          and(
+            gt(schedulings.date, String(startDateMsEpoch)),
+            lt(schedulings.date, String(endDateMsEpoch)),
+          ),
+        ),
+      )
+      .groupBy(({ cDay }) => cDay)
+      .having(({ amount, size }) => gte(amount, size))
 
-    return { blockedWeekDays, blockedWeekDatesRaw }
+    const blockedDates = blockedWeekDatesRaw.map(({ cDay }) => Number(cDay))
+
+    return { blockedWeekDays, blockedDates }
   })

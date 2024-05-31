@@ -1,14 +1,22 @@
 /* eslint-disable camelcase */
-import dayjs from 'dayjs'
-import { and, eq, gt, lt } from 'drizzle-orm'
+import { and, Column, eq, gt, gte, lt, sql } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/sqlite-core'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { dz } from '@/lib/drizzle'
-import { schedulings } from '@/lib/dz/migrations/schema'
+import { schedulings, user_time_intervals } from '@/lib/dz/migrations/schema'
 import { prisma } from '@/lib/prisma'
 
 type Params = {
   username: string
+}
+
+function getDay(col: Column) {
+  return sql<string>`STRFTIME('%d',${col}/1000,'unixepoch')`
+}
+
+function getWeekDay(col: Column) {
+  return sql<string>`STRFTIME('%w',${col}/1000,'unixepoch')`
 }
 
 export async function GET(request: NextRequest, context: { params: Params }) {
@@ -58,9 +66,17 @@ export async function GET(request: NextRequest, context: { params: Params }) {
   const endDate = `${year}-${month}-31`
   const endDateMsEpoch = new Date(endDate).getTime()
 
+  const UTI = alias(user_time_intervals, 'UTI')
   const blockedWeekDatesRaw = await dz
-    .select()
+    .select({
+      cDay: getDay(schedulings.date).as('cDay'),
+      amount: sql<number>`COUNT(*)`.as('amount'),
+      size: sql<string>`(UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60`.as(
+        'size',
+      ),
+    })
     .from(schedulings)
+    .leftJoin(UTI, eq(getWeekDay(schedulings.date), UTI.week_day))
     .where(
       and(
         eq(schedulings.user_id, user.id),
@@ -70,8 +86,10 @@ export async function GET(request: NextRequest, context: { params: Params }) {
         ),
       ),
     )
+    .groupBy(({ cDay }) => cDay)
+    .having(({ amount, size }) => gte(amount, size))
 
-  console.log(blockedWeekDatesRaw)
+  const blockedDates = blockedWeekDatesRaw.map(({ cDay }) => Number(cDay))
 
-  return NextResponse.json({ blockedWeekDays, blockedWeekDatesRaw })
+  return NextResponse.json({ blockedWeekDays, blockedDates })
 }
