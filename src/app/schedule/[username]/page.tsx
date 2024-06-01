@@ -1,5 +1,4 @@
-import CalendarStep from './calendar/page'
-// import ConfirmStep from './confirm/page'
+import StepWrapper from './step-wrapper'
 
 export default function ScheduleForm({
   params,
@@ -9,5 +8,5 @@ export default function ScheduleForm({
     username: string
   }
 }) {
-  return <CalendarStep username={params.username} />
+  return <StepWrapper username={params.username} />
 }

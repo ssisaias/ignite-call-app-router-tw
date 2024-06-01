@@ -1,5 +1,18 @@
 import ConfirmStepForm from './confirm-step-form'
 
-export default function ConfirmStep() {
-  return <ConfirmStepForm />
+interface ConfirmStepProps {
+  selectedSchedulingDate: Date
+  onBack: () => void
+}
+
+export default function ConfirmStep({
+  selectedSchedulingDate,
+  onBack,
+}: ConfirmStepProps) {
+  return (
+    <ConfirmStepForm
+      selectedSchedulingDate={selectedSchedulingDate}
+      onBack={onBack}
+    />
+  )
 }

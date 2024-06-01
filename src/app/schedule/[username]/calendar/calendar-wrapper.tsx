@@ -14,11 +14,15 @@ export interface Availability {
   availableTimes?: number[] | undefined | null
 }
 
+interface CalendarStepProps {
+  username?: string | null
+  onSelectDateTime: (date: Date) => void
+}
+
 export default function CalendarWrapper({
   username,
-}: {
-  username?: string | null
-}) {
+  onSelectDateTime,
+}: CalendarStepProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const {
@@ -46,6 +50,12 @@ export default function CalendarWrapper({
     execute({ username, date: dayjs(selectedDate).format('YYYY-MM-DD') })
   }, [execute, selectedDate, username])
 
+  function handleSelectTime(hour: number) {
+    const dateWithTime = dayjs(selectedDate).set('hour', hour).startOf('hour')
+    console.log('selected date time', dateWithTime)
+    onSelectDateTime(dateWithTime.toDate())
+  }
+
   return (
     <Box
       id="Container"
@@ -59,6 +69,7 @@ export default function CalendarWrapper({
       />
       {isDateSelected && (
         <TimePicker
+          onClick={handleSelectTime}
           loading={isExecuting}
           weekDay={weekDay}
           dateString={dateString}

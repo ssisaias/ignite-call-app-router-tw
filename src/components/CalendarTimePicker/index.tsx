@@ -10,6 +10,7 @@ interface TimePickerProps {
   weekDay?: string | null
   dateString?: string | null
   availability?: Availability | null | undefined
+  onClick?: (hour: number) => void
 }
 
 export default function TimePicker({
@@ -17,6 +18,7 @@ export default function TimePicker({
   dateString,
   availability,
   loading,
+  onClick,
 }: TimePickerProps) {
   return (
     <div
@@ -39,6 +41,7 @@ export default function TimePicker({
               availability?.possibleTimes.map((hour) => {
                 return (
                   <TimePickerItem
+                    onClick={() => onClick && onClick(hour)}
                     key={hour}
                     disabled={!availability?.availableTimes!.includes(hour)}
                   >
