@@ -110,7 +110,7 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
           disabled:
             date.endOf('day').isBefore(new Date()) ||
             blockedDays?.data?.blockedWeekDays.includes(date.get('day')) ||
-            blockedDays?.data?.blockedWeekDays.includes(date.get('date') - 1), // dont ask me
+            blockedDays?.data?.blockedDates.includes(date.get('date')), // dont ask me
         }
       }),
       ...nextMonthFillDays.map((date) => {
@@ -183,7 +183,10 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
             <thead>
               <tr>
                 {shortWeekDays.map((day) => (
-                  <th className="text-gray200 font-medium text-sm" key={day}>
+                  <th
+                    className="text-gray200 font-medium text-sm capitalize"
+                    key={day}
+                  >
                     {day}
                   </th>
                 ))}

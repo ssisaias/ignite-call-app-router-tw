@@ -49,7 +49,7 @@ export const getUserBlockedDates = actionClient
 
     const blockedWeekDays = [0, 1, 2, 3, 4, 5, 6].filter((weekDay) => {
       return !availableWeekDays.some((availableWeekDay) => {
-        return availableWeekDay.week_day === weekDay
+        return availableWeekDay.week_day === weekDay - 1
       })
     })
 
