@@ -3,6 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarBlank, Clock } from '@phosphor-icons/react/dist/ssr'
 import dayjs from 'dayjs'
+import { useParams } from 'next/navigation'
+import { useAction } from 'next-safe-action/hooks'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -11,6 +13,7 @@ import { Button } from '@/components/Button'
 import { Text } from '@/components/Text'
 import { TextArea } from '@/components/TextArea'
 import { TextInput } from '@/components/TextInput'
+import { CreateSchedule } from '@/lib/actions/insert-booking'
 
 const confirmFormSchema = z.object({
   name: z.string().min(3, { message: 'Nome deve ter pelo menos 3 caracteres' }),
@@ -33,6 +36,21 @@ export default function ConfirmStepForm({
     'DD[ de ]MMMM[ de ]YYYY',
   )
   const formatedTime = dayjs(selectedSchedulingDate).format('HH:mm')
+  const params = useParams<{ username: string }>()
+  const username = params.username
+  const { execute, isExecuting } = useAction(CreateSchedule, {
+    onSuccess: ({ data, input }) => {
+      console.log(data)
+      console.log(input)
+      if (data.status === 201) {
+        onBack()
+      }
+    },
+    onError: ({ error, input }) => {
+      console.log(error)
+      console.log(input)
+    },
+  })
 
   const {
     register,
@@ -41,7 +59,14 @@ export default function ConfirmStepForm({
   } = useForm<ConfirmFormData>({ resolver: zodResolver(confirmFormSchema) })
 
   function handleConfirmScheduling(data: ConfirmFormData) {
-    console.log(data)
+    console.log(username, data)
+    execute({
+      username,
+      date: selectedSchedulingDate.toISOString(),
+      email: data.email,
+      name: data.name,
+      observations: data.observations ?? '',
+    })
   }
 
   return (
@@ -84,10 +109,15 @@ export default function ConfirmStepForm({
       </label>
 
       <div id="FormActions" className="flex justify-end gap-2 mt-2">
-        <Button type="button" variant="tertiary" onClick={onBack}>
+        <Button
+          type="button"
+          variant="tertiary"
+          onClick={onBack}
+          disabled={isExecuting}
+        >
           Cancelar
         </Button>
-        <Button type="submit" disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting || isExecuting}>
           Confirmar
         </Button>
       </div>
