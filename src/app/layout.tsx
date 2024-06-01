@@ -10,8 +10,9 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-  title: 'Ignite Call',
-  description: 'Cool app',
+  title: 'Agendamento descomplicado',
+  description:
+    'Conecte seu calendário e permita que seus clientes agendem horários com você no seu tempo livre.',
 }
 
 export default function RootLayout({

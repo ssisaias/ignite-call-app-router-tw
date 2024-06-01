@@ -1,8 +1,37 @@
+import { Metadata } from 'next'
+
 import { Heading } from '@/components/Heading'
 import { Multistep } from '@/components/Multistep'
 import { Text } from '@/components/Text'
 
 import IntervalForm from './intervalForm'
+
+export const metadata: Metadata = {
+  title: 'Agendamento descomplicado',
+  description:
+    'Conecte seu calendário e permita que seus clientes agendem horários com você no seu tempo livre.',
+  openGraph: {
+    title: 'Agendamento descomplicado',
+    description:
+      'Conecte seu calendário e permita que seus clientes agendem horários com você no seu tempo livre.',
+    siteName: 'Ignite Call',
+    locale: 'pt_BR',
+    type: 'website',
+  },
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+}
 
 export default function Page() {
   // const session = await auth()
