@@ -1,11 +1,13 @@
 'use server'
 import dayjs from 'dayjs'
 import { and, eq } from 'drizzle-orm'
+import { google } from 'googleapis'
 import { z } from 'zod'
 
 import { dz } from '@/lib/drizzle'
 import { schedulings, users } from '@/lib/dz/migrations/schema'
 
+import { getGoogleOAuthToken } from '../google'
 import { actionClient } from '../safe-action'
 
 const createSchedulingSchema = z.object({
@@ -72,6 +74,35 @@ export const CreateSchedule = actionClient
           user_id: user[0].id,
         })
         .returning()
+
+      const calendar = google.calendar({
+        version: 'v3',
+        auth: await getGoogleOAuthToken(user[0].id),
+      })
+
+      await calendar.events.insert({
+        calendarId: 'primary',
+        conferenceDataVersion: 1,
+        requestBody: {
+          summary: `Ignite Call: ${name}`,
+          description: observations,
+          start: {
+            dateTime: schedulingDate.format(),
+          },
+          end: {
+            dateTime: schedulingDate.add(1, 'hour').format(),
+          },
+          attendees: [{ email, displayName: name }],
+          conferenceData: {
+            createRequest: {
+              requestId: row[0].id,
+              conferenceSolutionKey: {
+                type: 'hangoutsMeet',
+              },
+            },
+          },
+        },
+      })
 
       return {
         message: 'Scheduling created',
