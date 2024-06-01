@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { sql } from 'drizzle-orm'
+import { uuid } from 'drizzle-orm/pg-core'
 import {
   AnySQLiteColumn,
   foreignKey,
@@ -26,7 +27,10 @@ export const _prisma_migrations = sqliteTable('_prisma_migrations', {
 export const users = sqliteTable(
   'users',
   {
-    id: text('id').primaryKey().notNull(),
+    id: text('id')
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => crypto.randomUUID()),
     username: text('username').notNull(),
     name: text('name').notNull(),
     created_at: numeric('created_at')
@@ -49,7 +53,10 @@ export const users = sqliteTable(
 export const accounts = sqliteTable(
   'accounts',
   {
-    id: text('id').primaryKey().notNull(),
+    id: text('id')
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => crypto.randomUUID()),
     user_id: text('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
@@ -80,7 +87,10 @@ export const accounts = sqliteTable(
 export const sessions = sqliteTable(
   'sessions',
   {
-    id: text('id').primaryKey().notNull(),
+    id: text('id')
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => crypto.randomUUID()),
     session_token: text('session_token').notNull(),
     user_id: text('user_id')
       .notNull()
@@ -117,7 +127,10 @@ export const VerificationToken = sqliteTable(
 )
 
 export const user_time_intervals = sqliteTable('user_time_intervals', {
-  id: text('id').primaryKey().notNull(),
+  id: text('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
   week_day: integer('week_day').notNull(),
   time_start_in_minutes: integer('time_start_in_minutes').notNull(),
   time_end_in_minutes: integer('time_end_in_minutes').notNull(),
@@ -127,7 +140,10 @@ export const user_time_intervals = sqliteTable('user_time_intervals', {
 })
 
 export const schedulings = sqliteTable('schedulings', {
-  id: text('id').primaryKey().notNull(),
+  id: text('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
   date: numeric('date').notNull(),
   name: text('name').notNull(),
   email: text('email').notNull(),
