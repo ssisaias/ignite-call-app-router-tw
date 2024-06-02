@@ -110,7 +110,7 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
           disabled:
             date.endOf('day').isBefore(new Date()) ||
             blockedDays?.data?.blockedWeekDays.includes(date.get('day')) ||
-            blockedDays?.data?.blockedDates.includes(date.get('date')), // dont ask me
+            blockedDays?.data?.blockedDates.includes(date.get('date') - 1),
         }
       }),
       ...nextMonthFillDays.map((date) => {
