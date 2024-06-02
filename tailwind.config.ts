@@ -6,7 +6,7 @@ import {
   lineHeights,
   radii,
   space,
-} from '@isaias-ui/tokens/src'
+} from '@isaias-ui/tokens'
 import type { Config } from 'tailwindcss'
 
 const config: Config = {

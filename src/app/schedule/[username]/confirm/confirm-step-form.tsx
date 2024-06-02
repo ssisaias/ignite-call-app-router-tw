@@ -42,6 +42,7 @@ export default function ConfirmStepForm({
   const { execute, isExecuting } = useAction(CreateSchedule, {
     onSuccess: ({ data }) => {
       if (data.status === 201) {
+        toast.success('Horário agendado!')
         onBack()
       }
     },
