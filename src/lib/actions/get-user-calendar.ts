@@ -1,10 +1,13 @@
 /* eslint-disable camelcase */
 'use server'
 import dayjs from 'dayjs'
+import { and, eq, gte, lte } from 'drizzle-orm'
 import z from 'zod'
 
-import { prisma } from '../prisma'
+import { dz } from '../drizzle'
+import { schedulings, user_time_intervals } from '../dz/migrations/schema'
 import { actionClient } from '../safe-action'
+import { getPublicUserInfo } from './get-user-info'
 
 const schema = z.object({
   username: z.string(),
@@ -23,9 +26,7 @@ export const getUserAgenda = actionClient
       return null
     }
 
-    const user = await prisma.user.findUnique({
-      where: { username },
-    })
+    const user = await getPublicUserInfo({ username })
 
     if (!user) {
       return null
@@ -38,18 +39,21 @@ export const getUserAgenda = actionClient
       return { availability: [] }
     }
 
-    const userAvailability = await prisma.userTimeInterval.findFirst({
-      where: {
-        user_id: user.id,
-        week_day: referenceDate.get('day'),
-      },
-    })
+    const userAvailability = await dz
+      .select()
+      .from(user_time_intervals)
+      .where(
+        and(
+          eq(user_time_intervals.user_id, user.data?.id ?? ''),
+          eq(user_time_intervals.week_day, referenceDate.get('day')),
+        ),
+      )
 
     if (!userAvailability) {
       return { availability: [] }
     }
 
-    const { time_start_in_minutes, time_end_in_minutes } = userAvailability
+    const { time_start_in_minutes, time_end_in_minutes } = userAvailability[0]
 
     const startHour = time_start_in_minutes / 60
     const endHour = time_end_in_minutes / 60
@@ -60,15 +64,21 @@ export const getUserAgenda = actionClient
       },
     )
 
-    const blockedTimes = await prisma.scheduling.findMany({
-      where: {
-        user_id: user.id,
-        date: {
-          gte: referenceDate.set('hour', startHour).toDate(),
-          lte: referenceDate.set('hour', endHour).toDate(),
-        },
-      },
-    })
+    const blockedTimes = await dz
+      .select()
+      .from(schedulings)
+      .where(
+        and(
+          gte(
+            schedulings.date,
+            String(referenceDate.set('hour', startHour).toDate().getTime()),
+          ),
+          lte(
+            schedulings.date,
+            String(referenceDate.set('hour', endHour).toDate().getTime()),
+          ),
+        ),
+      )
 
     const availableTimes = possibleTimes.filter((time) => {
       return !blockedTimes.some((blockedTime) => {
