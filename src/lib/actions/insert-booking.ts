@@ -1,5 +1,5 @@
 'use server'
-import { isAxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import dayjs, { Dayjs } from 'dayjs'
 import { and, eq } from 'drizzle-orm'
 // eslint-disable-next-line camelcase
@@ -29,29 +29,33 @@ async function insertIntoCalendar(
   email: string,
   displayName: string,
 ) {
-  await calendarRef.events.insert({
-    calendarId: 'primary',
-    conferenceDataVersion: 1,
-    requestBody: {
-      summary: `Ignite Call: ${displayName}`,
-      description: observations,
-      start: {
-        dateTime: schedulingDate.format(),
-      },
-      end: {
-        dateTime: schedulingDate.add(1, 'hour').format(),
-      },
-      attendees: [{ email, displayName }],
-      conferenceData: {
-        createRequest: {
-          requestId: reqId,
-          conferenceSolutionKey: {
-            type: 'hangoutsMeet',
+  await calendarRef.events
+    .insert({
+      calendarId: 'primary',
+      conferenceDataVersion: 1,
+      requestBody: {
+        summary: `Ignite Call: ${displayName}`,
+        description: observations,
+        start: {
+          dateTime: schedulingDate.format(),
+        },
+        end: {
+          dateTime: schedulingDate.add(1, 'hour').format(),
+        },
+        attendees: [{ email, displayName }],
+        conferenceData: {
+          createRequest: {
+            requestId: reqId,
+            conferenceSolutionKey: {
+              type: 'hangoutsMeet',
+            },
           },
         },
       },
-    },
-  })
+    })
+    .catch((err) => {
+      throw err
+    })
 }
 
 export const CreateSchedule = actionClient
@@ -125,14 +129,14 @@ export const CreateSchedule = actionClient
           email,
           name,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         console.error(err)
 
-        if (!isAxiosError(err)) {
-          throw err
-        }
+        const error = err as Error | AxiosError | { status: number }
 
-        if (err.status === 401) {
+        if (!('status' in error)) throw error
+
+        if (error.status === 401) {
           const newCalendar = google.calendar({
             version: 'v3',
             auth: await getGoogleOAuthToken(user[0].id, true),
