@@ -6,6 +6,7 @@ import dayjs from 'dayjs'
 import { useParams } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
 import { useForm } from 'react-hook-form'
+import { toast, Toaster } from 'sonner'
 import { z } from 'zod'
 
 import { Box } from '@/components/Box'
@@ -39,16 +40,17 @@ export default function ConfirmStepForm({
   const params = useParams<{ username: string }>()
   const username = params.username
   const { execute, isExecuting } = useAction(CreateSchedule, {
-    onSuccess: ({ data, input }) => {
-      console.log(data)
-      console.log(input)
+    onSuccess: ({ data }) => {
       if (data.status === 201) {
         onBack()
       }
     },
-    onError: ({ error, input }) => {
-      console.log(error)
-      console.log(input)
+    onError: ({ error }) => {
+      console.error(error)
+      let errors = error.fetchError ?? ''
+      errors += error.serverError ?? ''
+      errors += error.validationErrors?._errors?.map((e) => e ?? '').join('\n')
+      toast.error(`Não foi possível agendar o horário. ${errors}`)
     },
   })
 
@@ -59,7 +61,6 @@ export default function ConfirmStepForm({
   } = useForm<ConfirmFormData>({ resolver: zodResolver(confirmFormSchema) })
 
   function handleConfirmScheduling(data: ConfirmFormData) {
-    console.log(username, data)
     execute({
       username,
       date: selectedSchedulingDate.toISOString(),
@@ -121,6 +122,7 @@ export default function ConfirmStepForm({
           Confirmar
         </Button>
       </div>
+      <Toaster theme="dark" />
     </Box>
   )
 }

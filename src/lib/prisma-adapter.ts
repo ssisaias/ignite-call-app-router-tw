@@ -14,8 +14,6 @@ export function MyPrismaAdapter({ req }: MyPrismaAdapterProps): Adapter {
       let userIdCookie
       if (req) {
         userIdCookie = req.cookies.get('@ignitecall:userid')?.value
-        console.log('seu cookie bom')
-        console.log(userIdCookie)
         if (!userIdCookie) {
           throw new Error('User ID not defined')
         }

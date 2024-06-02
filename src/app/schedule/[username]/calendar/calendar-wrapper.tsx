@@ -52,7 +52,6 @@ export default function CalendarWrapper({
 
   function handleSelectTime(hour: number) {
     const dateWithTime = dayjs(selectedDate).set('hour', hour).startOf('hour')
-    console.log('selected date time', dateWithTime)
     onSelectDateTime(dateWithTime.toDate())
   }
 

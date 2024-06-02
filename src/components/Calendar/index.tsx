@@ -37,12 +37,7 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
     execute,
     isExecuting,
     result: blockedDays,
-  } = useAction(getUserBlockedDates, {
-    onSuccess: (data) => {
-      console.log('SUCCESS')
-      console.log(data)
-    },
-  })
+  } = useAction(getUserBlockedDates)
 
   useEffect(() => {
     if (!username) {

@@ -60,7 +60,7 @@ export function RegisterForm() {
       if (error instanceof AxiosError && error?.response?.data?.message) {
         toast.error(error?.response?.data?.message)
       }
-      console.log(error)
+      console.error(error)
     }
   }
 

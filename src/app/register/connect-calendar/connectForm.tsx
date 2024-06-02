@@ -16,7 +16,6 @@ export function ConnectForm({ session }: ConnectFormProps) {
   const router = useRouter()
   const params = useSearchParams()
 
-  console.log(session)
   const hasAuthError = params.has('error')
   const isConnected = !!session
 
