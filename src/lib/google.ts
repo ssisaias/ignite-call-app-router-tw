@@ -4,7 +4,10 @@ import { google } from 'googleapis'
 
 import { prisma } from './prisma'
 
-export async function getGoogleOAuthToken(userId: string) {
+export async function getGoogleOAuthToken(
+  userId: string,
+  forceRefresh = false,
+) {
   const account = await prisma.account.findFirstOrThrow({
     where: {
       provider: 'google',
@@ -31,7 +34,7 @@ export async function getGoogleOAuthToken(userId: string) {
     new Date(),
   )
 
-  if (shouldTokenBeRefreshed) {
+  if (shouldTokenBeRefreshed || forceRefresh) {
     const { credentials } = await auth.refreshAccessToken()
     const {
       access_token,

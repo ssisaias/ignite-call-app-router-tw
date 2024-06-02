@@ -1,7 +1,9 @@
 'use server'
-import dayjs from 'dayjs'
+import { isAxiosError } from 'axios'
+import dayjs, { Dayjs } from 'dayjs'
 import { and, eq } from 'drizzle-orm'
-import { google } from 'googleapis'
+// eslint-disable-next-line camelcase
+import { calendar_v3, google } from 'googleapis'
 import { z } from 'zod'
 
 import { dz } from '@/lib/drizzle'
@@ -17,6 +19,40 @@ const createSchedulingSchema = z.object({
   observations: z.string(),
   date: z.string().datetime(),
 })
+
+async function insertIntoCalendar(
+  // eslint-disable-next-line camelcase
+  calendarRef: calendar_v3.Calendar,
+  reqId: string,
+  schedulingDate: Dayjs,
+  observations: string,
+  email: string,
+  displayName: string,
+) {
+  await calendarRef.events.insert({
+    calendarId: 'primary',
+    conferenceDataVersion: 1,
+    requestBody: {
+      summary: `Ignite Call: ${displayName}`,
+      description: observations,
+      start: {
+        dateTime: schedulingDate.format(),
+      },
+      end: {
+        dateTime: schedulingDate.add(1, 'hour').format(),
+      },
+      attendees: [{ email, displayName }],
+      conferenceData: {
+        createRequest: {
+          requestId: reqId,
+          conferenceSolutionKey: {
+            type: 'hangoutsMeet',
+          },
+        },
+      },
+    },
+  })
+}
 
 export const CreateSchedule = actionClient
   .schema(createSchedulingSchema)
@@ -80,29 +116,37 @@ export const CreateSchedule = actionClient
         auth: await getGoogleOAuthToken(user[0].id),
       })
 
-      await calendar.events.insert({
-        calendarId: 'primary',
-        conferenceDataVersion: 1,
-        requestBody: {
-          summary: `Ignite Call: ${name}`,
-          description: observations,
-          start: {
-            dateTime: schedulingDate.format(),
-          },
-          end: {
-            dateTime: schedulingDate.add(1, 'hour').format(),
-          },
-          attendees: [{ email, displayName: name }],
-          conferenceData: {
-            createRequest: {
-              requestId: row[0].id,
-              conferenceSolutionKey: {
-                type: 'hangoutsMeet',
-              },
-            },
-          },
-        },
-      })
+      try {
+        await insertIntoCalendar(
+          calendar,
+          row[0].id,
+          schedulingDate,
+          observations,
+          email,
+          name,
+        )
+      } catch (err) {
+        console.error(err)
+
+        if (!isAxiosError(err)) {
+          throw err
+        }
+
+        if (err.status === 401) {
+          const newCalendar = google.calendar({
+            version: 'v3',
+            auth: await getGoogleOAuthToken(user[0].id, true),
+          })
+          await insertIntoCalendar(
+            newCalendar,
+            row[0].id,
+            schedulingDate,
+            observations,
+            email,
+            name,
+          )
+        }
+      }
 
       return {
         message: 'Scheduling created',
