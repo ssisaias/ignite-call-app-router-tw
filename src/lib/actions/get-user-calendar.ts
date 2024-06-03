@@ -26,11 +26,13 @@ export const getUserAgenda = createServerAction()
       return null
     }
 
-    const user = await getPublicUserInfo({ username })
+    const usr = await getPublicUserInfo({ username })
 
-    if (!user) {
+    if (!usr || !usr[0]) {
       return null
     }
+
+    const user = usr[0]
 
     const referenceDate = dayjs(String(date))
     const isPastDate = referenceDate.endOf('day').isBefore(new Date())
@@ -44,7 +46,7 @@ export const getUserAgenda = createServerAction()
       .from(user_time_intervals)
       .where(
         and(
-          eq(user_time_intervals.user_id, user.data?.id ?? ''),
+          eq(user_time_intervals.user_id, user?.id ?? ''),
           eq(user_time_intervals.week_day, referenceDate.get('day')),
         ),
       )
