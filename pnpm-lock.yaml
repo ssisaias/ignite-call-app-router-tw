@@ -32,6 +32,9 @@ dependencies:
   '@radix-ui/react-tooltip':
     specifier: ^1.0.7
     version: 1.0.7(@types/react-dom@18.3.0)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1)
+  '@typeschema/zod':
+    specifier: ^0.13.3
+    version: 0.13.3(zod@3.23.8)
   axios:
     specifier: ^1.6.8
     version: 1.6.8
@@ -57,8 +60,8 @@ dependencies:
     specifier: 5.0.0-beta.18
     version: 5.0.0-beta.18(next@14.2.3)(react@18.3.1)
   next-safe-action:
-    specifier: 7.0.0-next.46
-    version: 7.0.0-next.46(next@14.2.3)(react@18.3.1)(zod@3.23.8)
+    specifier: v7.0.0-next.32
+    version: 7.0.0-next.32(@typeschema/zod@0.13.3)(next@14.2.3)(react@18.3.1)
   react:
     specifier: ^18
     version: 18.3.1
@@ -4172,22 +4175,16 @@ packages:
       react: 18.3.1
     dev: false
 
-  /next-safe-action@7.0.0-next.46(next@14.2.3)(react@18.3.1)(zod@3.23.8):
-    resolution: {integrity: sha512-B2xW4bmK1UXKeIwvG6Bscd5apq3Timt19TYGeKbJci1maYmv/ceiFe57qV6mKB0VFZvnXe4CcVjntFCmjUDtOw==}
+  /next-safe-action@7.0.0-next.32(@typeschema/zod@0.13.3)(next@14.2.3)(react@18.3.1):
+    resolution: {integrity: sha512-Ys2o1bEKZ/ZgNe2u23bwgyPVwgYUHQnkukTH8qrj4//c7RskgI1WiXrGjllzeukdrM5b11S/9seMyVhW5ZpvoA==}
     engines: {node: '>=18.17'}
     peerDependencies:
-      next: '>= 14.3.0-canary.42'
-      react: '>= 18.3.1'
-      zod: ^3.23.6
-    peerDependenciesMeta:
-      zod:
-        optional: true
+      next: '>= 14.0.0'
+      react: '>= 18.2.0'
     dependencies:
       '@typeschema/main': 0.13.9(@typeschema/zod@0.13.3)
-      '@typeschema/zod': 0.13.3(zod@3.23.8)
       next: 14.2.3(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
-      zod: 3.23.8
     transitivePeerDependencies:
       - '@types/json-schema'
       - '@typeschema/arktype'
@@ -4208,7 +4205,7 @@ packages:
       - '@typeschema/valita'
       - '@typeschema/vine'
       - '@typeschema/yup'
-      - zod-to-json-schema
+      - '@typeschema/zod'
     dev: false
 
   /next-tick@1.1.0:
