@@ -114,6 +114,14 @@ export const CreateSchedule = createServerAction()
       })
       .returning()
 
+    if (process.env.MODE === 'prod' ?? 'prod') {
+      return {
+        message: 'Scheduling created on DB',
+        status: 201,
+        data: row,
+      }
+    }
+
     const calendar = google.calendar({
       version: 'v3',
       auth: await getGoogleOAuthToken(user[0].id),
