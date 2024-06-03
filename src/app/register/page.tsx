@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 
 import { Heading } from '@/components/Heading'
 import { Multistep } from '@/components/Multistep'
@@ -36,7 +37,9 @@ export default async function Page() {
         </Text>
 
         <Multistep size={4} currentStep={1} />
-        <RegisterForm />
+        <Suspense>
+          <RegisterForm />
+        </Suspense>
       </div>
     </main>
   )

@@ -24,26 +24,24 @@ const confirmFormSchema = z.object({
 
 type ConfirmFormData = z.infer<typeof confirmFormSchema>
 
-interface ConfirmStepFormProps {
-  selectedSchedulingDate: Date
-  onBack: () => void
+export interface ConfirmStepFormProps {
+  dateSelected?: null | Date
+  onBackFn: () => void
 }
 
 export default function ConfirmStepForm({
-  selectedSchedulingDate,
-  onBack,
+  dateSelected,
+  onBackFn,
 }: ConfirmStepFormProps) {
-  const formatedDate = dayjs(selectedSchedulingDate).format(
-    'DD[ de ]MMMM[ de ]YYYY',
-  )
-  const formatedTime = dayjs(selectedSchedulingDate).format('HH:mm')
+  const formatedDate = dayjs(dateSelected).format('DD[ de ]MMMM[ de ]YYYY')
+  const formatedTime = dayjs(dateSelected).format('HH:mm')
   const params = useParams<{ username: string }>()
   const username = params.username
   const { execute, isExecuting } = useAction(CreateSchedule, {
     onSuccess: ({ data }) => {
       if (data.status === 201) {
         toast.success('Horário agendado!')
-        onBack()
+        onBackFn()
       }
     },
     onError: ({ error }) => {
@@ -62,9 +60,12 @@ export default function ConfirmStepForm({
   } = useForm<ConfirmFormData>({ resolver: zodResolver(confirmFormSchema) })
 
   function handleConfirmScheduling(data: ConfirmFormData) {
+    if (!dateSelected) {
+      return
+    }
     execute({
       username,
-      date: selectedSchedulingDate.toISOString(),
+      date: dateSelected.toISOString(),
       email: data.email,
       name: data.name,
       observations: data.observations ?? '',
@@ -114,7 +115,7 @@ export default function ConfirmStepForm({
         <Button
           type="button"
           variant="tertiary"
-          onClick={onBack}
+          onClick={onBackFn}
           disabled={isExecuting}
         >
           Cancelar
