@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useAction } from 'next-safe-action/hooks'
 import { useEffect } from 'react'
+import { useServerAction } from 'zsa-react'
 
 import { getPublicUserInfo } from '@/lib/actions/get-user-info'
 
@@ -17,9 +17,9 @@ interface SchedulesHeaderProps {
 export default function SchedulesHeader({ username }: SchedulesHeaderProps) {
   const {
     execute,
-    isExecuting,
-    result: userInfo,
-  } = useAction(getPublicUserInfo)
+    isPending,
+    data: userInfo,
+  } = useServerAction(getPublicUserInfo)
 
   useEffect(() => {
     if (username) {
@@ -29,7 +29,7 @@ export default function SchedulesHeader({ username }: SchedulesHeaderProps) {
 
   return (
     <>
-      {isExecuting ? (
+      {isPending ? (
         <div className="flex items-center justify-center">
           <Heading>Loading...</Heading>
         </div>
@@ -40,16 +40,16 @@ export default function SchedulesHeader({ username }: SchedulesHeaderProps) {
         >
           <div>
             {userInfo ? (
-              <Avatar src={userInfo?.data?.avatar_url || ''} />
+              <Avatar src={userInfo?.avatar_url || ''} />
             ) : (
               <Avatar src="https://thispersondoesnotexist.com/" />
             )}
           </div>
           <Heading className="leading-base font-bold" as={'h1'} size="2xl">
-            {userInfo?.data?.name}
+            {userInfo?.name}
           </Heading>
           <Text className="text-gray200" size="md">
-            {userInfo?.data?.bio || (
+            {userInfo?.bio || (
               <Link href="https://thispersondoesnotexist.com/">
                 this person does not exist
               </Link>

@@ -6,8 +6,8 @@ import {
   SpinnerGap,
 } from '@phosphor-icons/react/dist/ssr'
 import dayjs from 'dayjs'
-import { useAction } from 'next-safe-action/hooks'
 import { useEffect, useMemo, useState } from 'react'
+import { useServerAction } from 'zsa-react'
 
 import { getUserBlockedDates } from '@/lib/actions/get-user-blocked-dates'
 import { getWeekDays } from '@/lib/utils/get-week-days'
@@ -35,9 +35,9 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
 
   const {
     execute,
-    isExecuting,
-    result: blockedDays,
-  } = useAction(getUserBlockedDates)
+    isPending,
+    data: blockedDays,
+  } = useServerAction(getUserBlockedDates)
 
   useEffect(() => {
     if (!username) {
@@ -104,8 +104,8 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
           date,
           disabled:
             date.endOf('day').isBefore(new Date()) ||
-            blockedDays?.data?.blockedWeekDays.includes(date.get('day')) ||
-            blockedDays?.data?.blockedDates.includes(date.get('date') - 1),
+            blockedDays?.blockedWeekDays.includes(date.get('day')) ||
+            blockedDays?.blockedDates.includes(date.get('date') - 1),
         }
       }),
       ...nextMonthFillDays.map((date) => {
@@ -132,7 +132,7 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
 
   return (
     <>
-      {isExecuting || !blockedDays?.data?.blockedWeekDays ? (
+      {isPending || !blockedDays?.blockedWeekDays ? (
         <div className="flex items-center justify-center">
           <SpinnerGap size={32} className="text-gray-300" weight="fill" />
           <Text className="ml-2 text-gray-300">Please wait...</Text>

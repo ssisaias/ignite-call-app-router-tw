@@ -2,12 +2,12 @@
 import { and, Column, eq, gt, gte, lt, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/sqlite-core'
 import z from 'zod'
+import { createServerAction } from 'zsa'
 
 import { dz } from '../drizzle'
 // eslint-disable-next-line camelcase
 import { schedulings, user_time_intervals } from '../dz/migrations/schema'
 import { prisma } from '../prisma'
-import { actionClient } from '../safe-action'
 
 const schema = z.object({
   username: z.string(),
@@ -23,9 +23,9 @@ function getWeekDay(col: Column) {
   return sql<string>`STRFTIME('%w',${col}/1000,'unixepoch')`
 }
 
-export const getUserBlockedDates = actionClient
-  .schema(schema)
-  .action(async ({ parsedInput: { username, year, month } }) => {
+export const getUserBlockedDates = createServerAction()
+  .input(schema)
+  .handler(async ({ input: { username, year, month } }) => {
     if (!year || !month) {
       return null
     }

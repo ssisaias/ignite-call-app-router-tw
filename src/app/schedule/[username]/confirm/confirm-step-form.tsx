@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarBlank, Clock } from '@phosphor-icons/react/dist/ssr'
 import dayjs from 'dayjs'
 import { useParams } from 'next/navigation'
-import { useAction } from 'next-safe-action/hooks'
 import { useForm } from 'react-hook-form'
 import { toast, Toaster } from 'sonner'
 import { z } from 'zod'
+import { useServerAction } from 'zsa-react'
 
 import { Box } from '@/components/Box'
 import { Button } from '@/components/Button'
@@ -37,18 +37,18 @@ export default function ConfirmStepForm({
   const formatedTime = dayjs(dateSelected).format('HH:mm')
   const params = useParams<{ username: string }>()
   const username = params.username
-  const { execute, isExecuting } = useAction(CreateSchedule, {
+  const { execute, isPending } = useServerAction(CreateSchedule, {
     onSuccess: ({ data }) => {
-      if (data.status === 201) {
+      if (data?.status === 201) {
         toast.success('Horário agendado!')
         onBackFn()
       }
     },
-    onError: ({ error }) => {
-      console.error(error)
-      let errors = error.fetchError ?? ''
-      errors += error.serverError ?? ''
-      errors += error.validationErrors?._errors?.map((e) => e ?? '').join('\n')
+    onError: ({ err }) => {
+      console.error(err)
+      let errors = err.message ?? ''
+      errors += err.cause ?? ''
+      errors += err.stack ?? ''
       toast.error(`Não foi possível agendar o horário. ${errors}`)
     },
   })
@@ -116,11 +116,11 @@ export default function ConfirmStepForm({
           type="button"
           variant="tertiary"
           onClick={onBackFn}
-          disabled={isExecuting}
+          disabled={isPending}
         >
           Cancelar
         </Button>
-        <Button type="submit" disabled={isSubmitting || isExecuting}>
+        <Button type="submit" disabled={isSubmitting || isPending}>
           Confirmar
         </Button>
       </div>

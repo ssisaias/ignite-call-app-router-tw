@@ -1,8 +1,8 @@
 'use client'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useAction } from 'next-safe-action/hooks'
 import { useEffect, useState } from 'react'
+import { useServerAction } from 'zsa-react'
 
 import { Box } from '@/components/Box'
 import { Calendar } from '@/components/Calendar'
@@ -27,9 +27,9 @@ export default function CalendarWrapper({
 
   const {
     execute,
-    isExecuting,
-    result: availability,
-  } = useAction(getUserAgenda)
+    isPending,
+    data: availability,
+  } = useServerAction(getUserAgenda)
 
   const isDateSelected = !!selectedDate
 
@@ -69,10 +69,10 @@ export default function CalendarWrapper({
       {isDateSelected && (
         <TimePicker
           onClick={handleSelectTime}
-          loading={isExecuting}
+          loading={isPending}
           weekDay={weekDay}
           dateString={dateString}
-          availability={availability.data!}
+          availability={availability!}
         />
       )}
     </Box>

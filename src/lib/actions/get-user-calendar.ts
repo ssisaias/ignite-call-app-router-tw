@@ -3,10 +3,10 @@
 import dayjs from 'dayjs'
 import { and, eq, gte, lte } from 'drizzle-orm'
 import z from 'zod'
+import { createServerAction } from 'zsa'
 
 import { dz } from '../drizzle'
 import { schedulings, user_time_intervals } from '../dz/migrations/schema'
-import { actionClient } from '../safe-action'
 import { getPublicUserInfo } from './get-user-info'
 
 const schema = z.object({
@@ -19,9 +19,9 @@ export interface Availability {
   availableTimes: number[]
 }
 
-export const getUserAgenda = actionClient
-  .schema(schema)
-  .action(async ({ parsedInput: { username, date } }) => {
+export const getUserAgenda = createServerAction()
+  .input(schema)
+  .handler(async ({ input: { username, date } }) => {
     if (!date) {
       return null
     }
