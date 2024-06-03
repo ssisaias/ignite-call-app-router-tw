@@ -1,9 +1,6 @@
 /* eslint-disable camelcase */
 import { sql } from 'drizzle-orm'
-import { uuid } from 'drizzle-orm/pg-core'
 import {
-  AnySQLiteColumn,
-  foreignKey,
   integer,
   numeric,
   sqliteTable,

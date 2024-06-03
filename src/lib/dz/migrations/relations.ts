@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { relations } from 'drizzle-orm/relations'
 
 import {
