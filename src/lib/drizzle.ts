@@ -16,7 +16,7 @@ if (mode === 'dev') {
     url: process.env.TURSO_DATABASE_URL!,
     authToken: process.env.TURSO_AUTH_TOKEN,
   })
-  db = drizzle(turso)
+  db = drizzle(turso, { logger: true })
 }
 
 export const dz = db
