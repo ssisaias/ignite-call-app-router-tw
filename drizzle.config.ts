@@ -5,7 +5,7 @@ const dbUrl = process.env.TURSO_DATABASE_URL ?? ''
 const authToken = process.env.TURSO_AUTH_TOKEN ?? ''
 
 const credentials = {
-  url: mode === 'dev' ? './prisma/dev.db' : dbUrl,
+  url: mode === 'dev' ? 'file:./prisma/dev.db' : dbUrl,
   authToken: mode === 'dev' ? '' : authToken,
 }
 

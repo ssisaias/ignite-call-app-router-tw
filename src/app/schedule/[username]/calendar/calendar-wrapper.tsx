@@ -47,7 +47,10 @@ export default function CalendarWrapper({
     if (!selectedDate || !username) {
       return
     }
-    execute({ username, date: dayjs(selectedDate).format('YYYY-MM-DD') })
+    execute({
+      username,
+      date: dayjs(selectedDate).format('YYYY-MM-DD'),
+    })
   }, [execute, selectedDate, username])
 
   function handleSelectTime(hour: number) {

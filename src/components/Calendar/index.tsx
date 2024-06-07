@@ -105,7 +105,7 @@ export function Calendar({ username, onDateSelected }: CalendarProps) {
           disabled:
             date.endOf('day').isBefore(new Date()) ||
             blockedDays?.blockedWeekDays.includes(date.get('day')) ||
-            blockedDays?.blockedDates.includes(date.get('date') - 1),
+            blockedDays?.blockedDates.includes(date.get('date')),
         }
       }),
       ...nextMonthFillDays.map((date) => {

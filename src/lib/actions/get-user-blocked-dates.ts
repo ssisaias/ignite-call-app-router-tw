@@ -1,5 +1,5 @@
 'use server'
-import { and, Column, eq, gt, gte, lt, sql } from 'drizzle-orm'
+import { and, Column, eq, gte, lte, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/sqlite-core'
 import z from 'zod'
 import { createServerAction } from 'zsa'
@@ -68,13 +68,19 @@ export const getUserBlockedDates = createServerAction()
         ),
       })
       .from(schedulings)
-      .leftJoin(UTI, eq(getWeekDay(schedulings.date), UTI.week_day))
+      .leftJoin(
+        UTI,
+        and(
+          eq(getWeekDay(schedulings.date), UTI.week_day),
+          eq(UTI.user_id, user.id),
+        ),
+      )
       .where(
         and(
           eq(schedulings.user_id, user.id),
           and(
-            gt(schedulings.date, String(startDateMsEpoch)),
-            lt(schedulings.date, String(endDateMsEpoch)),
+            gte(schedulings.date, String(startDateMsEpoch)),
+            lte(schedulings.date, String(endDateMsEpoch)),
           ),
         ),
       )
